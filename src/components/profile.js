@@ -69,11 +69,13 @@ export const Profile = ({banned}) => {
   const [offset, setOffset] = useState(0)
   const { account } = useParams();
 
-
+console.log(account)
   const { data: alias, error: aliasError } = useSWR(account.length !== 36 ? ['/api/name', getAddressbyName, account] : null, fetcher)
-  const { data: subjkt, error: subjktError } = useSWR(account.length !== 36 ? ['/api/subjkt', getAddressbySubjkt, account] : null, hicFetcher)
+  const { data: subjkt, error: subjktError } = useSWR(account.length !== 36 ? ['/api/subjkt', getAddressbySubjkt, account.toLowerCase()] : null, hicFetcher)
   const address = account?.length === 36 ? account : alias?.tzprofiles[0]?.account || subjkt?.hic_et_nunc_holder[0]?.address || null
+  console.log(address)
   const { data, error } = useSWR(address?.length === 36 ? ['/api/profile', getObjkts, address] : null, fetcher, { refreshInterval: 15000 })
+
   if ((subjkt || alias) && !address) return <div>nada. . .<p/></div>
   if (error) return <p>error</p>
   if (!data ) return <div>loading. . .<p/></div>

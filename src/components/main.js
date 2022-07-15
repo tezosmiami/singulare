@@ -69,7 +69,7 @@ export const Main = ({banned}) => {
 
     return (
       <>
-      <p style={{margtinTop:0}}>recent objkts:</p>
+      <p style={{marginTop:0}}>recent objkts:</p>
       <Masonry
         breakpointCols={breakpointColumns}
         className='grid'
