@@ -30,7 +30,7 @@ query subjkt($address: String!) {
 }
 `
 export const getObjkts = gql`
-query walletName($address: String) {
+query walletName($address: String!) {
     created: tokens(where: {artist_address: {_eq: $address}, artifact_uri: {_is_null: false}, mime_type: {_is_null: false}, editions: {_eq: "1"}, fa2_address: {_neq: "KT1EpGgjQs73QfFJs9z7m1Mxm5MTnpC2tqse"}}, order_by: {minted_at: desc}) {
       artifact_uri
       display_uri
@@ -68,10 +68,8 @@ export const Profile = ({banned}) => {
 //   const [pageIndex, setPageIndex] = useState(0);
   const [offset, setOffset] = useState(0)
   const { account } = useParams();
-
-console.log(account)
   const { data: alias, error: aliasError } = useSWR(account.length !== 36 ? ['/api/name', getAddressbyName, account] : null, fetcher)
-  const { data: subjkt, error: subjktError } = useSWR(account.length !== 36 ? ['/api/subjkt', getAddressbySubjkt, account.toLowerCase()] : null, hicFetcher)
+  const { data: subjkt, error: subjktError } = useSWR(account.length !== 36 ? ['/api/subjkt', getAddressbySubjkt, account.toLowerCase().replace(/\s+/g, '')] : null, hicFetcher)
   const address = account?.length === 36 ? account : alias?.tzprofiles[0]?.account || subjkt?.hic_et_nunc_holder[0]?.address || null
   const { data, error } = useSWR(address?.length === 36 ? ['/api/profile', getObjkts, address] : null, fetcher, { refreshInterval: 15000 })
 
@@ -90,10 +88,9 @@ console.log(account)
 //   });
     return (
       <>
-      <p  style={{fontSize:'25px'}}>
-        <a href={alias?.tzprofiles[0]?.twitter ? `https://twitter.com/${alias.tzprofiles[0].twitter}`: null} target="blank"  rel="noopener noreferrer">
+        <a style={{fontSize:'27px'}} href={alias?.tzprofiles[0]?.twitter ? `https://twitter.com/${alias.tzprofiles[0].twitter}`: null} target="blank"  rel="noopener noreferrer">
         {account?.length===36 ? address.substr(0, 4) + "..." + address.substr(-4) : account}
-      </a></p>
+      </a>
       {/* <img className='avatar' src={filteredcreated ? filteredcreated[0].minter_profile?.logo : null}/> */}
       {filteredcreated.length > 0 && <p>created:</p>}
       <div className='container'>
