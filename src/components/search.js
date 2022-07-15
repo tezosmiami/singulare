@@ -24,6 +24,9 @@ const getSearch = gql`
           fa2_address
           token_id
           artist_address
+          artist_profile {
+      alias
+    }
       }
       tags: tokens(where: {tags: {tag: {_eq: $word}}, artifact_uri: {_is_null: false},
         mime_type: {_is_null: false}, editions: {_eq: "1"}, fa2_address: {_neq: "KT1EpGgjQs73QfFJs9z7m1Mxm5MTnpC2tqse"}}, limit: 108, order_by: {minted_at: desc}, offset: $offset) {
@@ -42,6 +45,7 @@ export const Search = ({returnSearch, query, banned}) => {
     const [input, setInput] = useState()
     const [loading, setLoading] = useState()
     const [objkts, setObjkts] = useState()
+    const [isArtist, setIsArtist] = useState(Boolean)
     const [offset, setOffset] = useState(0);
     const [pageIndex, setPageIndex] = useState(0)
 
@@ -84,6 +88,7 @@ export const Search = ({returnSearch, query, banned}) => {
           ...aliases.filter(({ artifact_uri }) => !tags_artifacts.has(artifact_uri))
         ];
         setObjkts(total)
+        setIsArtist(total.every((i) => i.artist_profile?.alias === search))
         returnSearch(total)
         navigate({
             pathname: '/',
@@ -94,8 +99,8 @@ export const Search = ({returnSearch, query, banned}) => {
         }
         }
         getObjkts();
-    }, [search,banned, offset])
-    const isArtist = objkts?.every((i) => i.artist_profile?.alias === search)
+    }, [search, banned, offset])
+
     // if (search && !loading) return (<div>empty return. . .</div>)
     // if (loading) return 'loading. . .'
 
