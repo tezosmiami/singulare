@@ -102,7 +102,6 @@ export const Search = ({returnSearch, query, banned}) => {
     return(
   <>
     <div className='container'>
-      <p></p>
     <div>
         <input
         className='reverse searchbar'
@@ -115,9 +114,10 @@ export const Search = ({returnSearch, query, banned}) => {
         onKeyPress={handleKey}
       />
     </div>
-    <p/>  
-    {loading && search && <div> searching: {search}. . .<p/></div> }
-    {query && objkts?.length > 0 ? <div className='inline'> {isArtist ? <Link to={`/${search}`}> &nbsp;{search}</Link> : search} </div> :
+<p></p>
+    {loading && search && <div> <p>searching: {search}. . .</p></div> }
+    
+    {query && objkts?.length > 0 ? <div><p> {isArtist ? <Link to={`/${search}`}> &nbsp;{search}</Link> : `#${search}`}</p> </div> :
      !loading && query && objkts ? <div> nada. . .<p /> </div> : null} 
        <Masonry
          breakpointCols={breakpointColumns}
