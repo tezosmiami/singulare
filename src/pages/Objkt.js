@@ -111,7 +111,7 @@ return(
         
         <p hidden={objkt.mime_type.includes('text')}>{objkt.name} </p>
        
-        {objkt.mime_type.includes('text') && <div style= {{borderBottom: '6px dotted', width: '63%', marginBottom: '27px'}} />}
+         <div style= {{borderBottom: '6px dotted', width: '63%', marginBottom: '27px'}} />
 
         </div>
        
