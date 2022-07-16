@@ -5,6 +5,7 @@ import ReactPlayer from 'react-player'
 import { useParams, Link } from 'react-router-dom';
 import Masonry from 'react-masonry-css'
 
+
 const breakpointColumns = {
   default: 5,
   1540: 4,
@@ -38,6 +39,7 @@ query walletName($address: String!) {
       fa2_address
       token_id
       mime_type
+      description
       platform
       minter_profile {
         alias
@@ -52,6 +54,7 @@ query walletName($address: String!) {
     artist_address
     display_uri
     platform
+    description
     fa2_address
     token_id
     mime_type
@@ -82,7 +85,7 @@ export const Profile = ({banned}) => {
   
   const filteredcreated = data?.created.filter((i) => !banned.includes(i.artist_address))
   const filteredcollected = data?.collected.filter((i) => !banned.includes(i.artist_address))
-  
+
   //   totalpixils?.length > 0 && totalpixils.sort(function (a, b) {
 //     return b.opid - a.opid;
 //   });
@@ -106,7 +109,7 @@ export const Profile = ({banned}) => {
             <div  className='pop'>
               <ReactPlayer url={'https://ipfs.io/ipfs/' + p?.artifact_uri?.slice(7)} width='100%' height='100%' muted={true} playing={true} loop={true}/>
              </div>
-            : ''}
+           : p.mime_type.includes('text') ? <div className='text'>{p.description}</div> : ''}
             </Link>
              ))}
              </Masonry>
@@ -130,7 +133,7 @@ export const Profile = ({banned}) => {
          <div className='pop'>
            <ReactPlayer url={'https://ipfs.io/ipfs/' + p.artifact_uri.slice(7)} width='100%' height='100%' muted={true} playing={true} loop={true}/>
           </div>
-         : ''}
+        : p.mime_type.includes('text') ? <div className='text'>{p.description}</div> : ''}
          </Link>
           ))}
           </Masonry>

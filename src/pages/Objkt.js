@@ -14,13 +14,14 @@ export const Objkt = ({banned}) => {
   const params = useParams();
   const queryObjkt = gql`
     query objkt {
-      tokens(where: {fa2_address: {_eq: "${params.contract}", _neq: "KT1EpGgjQs73QfFJs9z7m1Mxm5MTnpC2tqse"}, token_id: {_eq: "${params.id}"}}) {
+      tokens(where: {editions: {_eq: "1"}, fa2_address: {_eq: "${params.contract}", _neq: "KT1EpGgjQs73QfFJs9z7m1Mxm5MTnpC2tqse"}, token_id: {_eq: "${params.id}"}}) {
         artist_address
         artifact_uri
         display_uri
         creators
         name
         symbol
+        description
         minted_at
         minter_profile {
           alias
@@ -103,18 +104,19 @@ return(
          </a>
       </div>
     // </a> 
-    : null}
+    
+    :  objkt.mime_type.includes('text') ? <a className='view' href = {`https://ipfs.io/ipfs/${objkt.artifact_uri.slice(7)}`} target='blank'  rel='noopener noreferrer'><div className='textObjkt'>{objkt.description}</div></a> : null}
     <div>
     <div style= {{borderBottom: '6px dotted', width: '63%', marginTop:'33px'}} />
         
-        <p>{objkt.name} </p>
+        <p hidden={objkt.mime_type.includes('text')}>{objkt.name} </p>
        
-        <div style= {{borderBottom: '6px dotted', width: '63%', marginBottom: '27px'}} />
+        {objkt.mime_type.includes('text') && <div style= {{borderBottom: '6px dotted', width: '63%', marginBottom: '27px'}} />}
 
         </div>
        
-        <p className='descript'> {objkt.description}</p>
-        <div style= {{borderBottom: '6px dotted', width: '63%', margin: '33px'}} /> 
+        <p hidden={objkt.mime_type.includes('text')} className='descript'> {objkt.description}</p>
+        {!objkt.mime_type.includes('text') && <div style= {{borderBottom: '6px dotted', width: '63%', margin: '33px'}} />}
         {/* <a href={params.contract ==='KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton' ? `https://hicetnunc.miami/objkt/${params.id}` : 
               params.contract === 'KT1LjmAdYQCLBjwv4S2oFkEzyHVkomAf5MrW' ? `https://versum.xyz/token/versum/${params.id}` 
              : `https://objkt.com/asset/${params.contract}/${params.id}`} target="blank"  rel="noopener noreferrer">   */}
@@ -127,9 +129,12 @@ return(
                     : objkt.platform === 'VERSUM' ? `https://versum.xyz/token/versum/${params.id}` 
                     : objkt.platform === '8BIDOU' && objkt.eightbid_rgb.length < 800 ? `https://ui.8bidou.com/item/?id=${params.id}` 
                     : objkt.platform === '8BIDOU' &&  objkt.eightbid_rgb.length > 800 ? `https://ui.8bidou.com/item_r/?id=${params.id}` 
+                    : objkt.platform === 'TYPED' ? `https://typed.art/${params.id}`  
                     : `https://objkt.com/asset/${params.contract}/${params.id}`} target="blank"  rel="noopener noreferrer">
+                    
                     {objkt.platform === 'HEN' ? 'H=N' : objkt.platform === "VERSUM" ? objkt.platform 
-                    : objkt.platform === '8BIDOU' ? '8BiDOU' : 'OBJKT'}</a></p>
+                    : objkt.platform === '8BIDOU' ? '8BiDOU'
+                    : objkt.platform === 'TYPED' ? 'TYPEDART' :'OBJKT'}</a></p>
             </div>
           {/* </a> */}
             {message}

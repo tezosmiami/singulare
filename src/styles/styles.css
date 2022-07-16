@@ -7,7 +7,13 @@
     font-style: normal;
     src: url('fonts/halo.regular.ttf') format('truetype');
   }
-
+  @font-face {
+    font-family: 'Julia Mono';
+    font-display: swap;
+    font-weight: normal;
+    font-style: normal;
+    src: url('fonts/JuliaMono-Regular.woff2') format('woff2');
+  }
   @font-face {
     font-family: 'Advantage';
     font-display: swap;
@@ -105,7 +111,8 @@ a{
     transform: scale(1.011);
     transition-duration: .3s;
   }
-    .canvas {
+
+  .canvas {
     display: flex; 
     flex-direction: row;
     flex-Wrap: wrap;
@@ -168,9 +175,10 @@ input:focus {
   object-fit: contain;
   border: 6px solid var(--text);
   border-radius: 3%;
-  word-wrap: break-word;
+  overflow-x:auto;
   padding: 6px;
   cursor:pointer;
+  
 }
 
 .descript{
@@ -209,5 +217,41 @@ position:relative;
 .center{
   display:flex;
   justify-content: center;
+}
+.text{
+  font-family: 'Julia Mono';
+  font-size:9px;
+  text-align: center;
+  width:270px;
+  height:270px;
+  overflow:hidden;
+  word-break: keep-all;
+  /* display:block; */
+   white-space: pre;
+  overflow-x: auto;
+  overflow-wrap: normal;
   justify-content: center;
+  margin:8px 8px 8px 8px;
+  border: 6px solid var(--text);
+  border-radius: 3%;
+  padding: 6px;
+  cursor:pointer;
+}
+.textObjkt{
+  font-family: 'Julia Mono';
+  font-size:1vw;
+  text-align: center;
+  justify-content: center;
+  word-break: keep-all;
+  display:block;
+  white-space: break-spaces;
+  overflow-x: auto;
+  overflow-wrap: normal;
+  margin:8px 8px 8px 8px;
+  padding: 6px;
+  cursor:pointer;
+}
+.text:hover{
+  transform: scale(1.011);
+  transition-duration: .3s;
 }
