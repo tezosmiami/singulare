@@ -224,7 +224,6 @@ position:relative;
   text-align: center;
   width:270px;
   height:270px;
-  overflow:hidden;
   word-break: keep-all;
   /* display:block; */
    white-space: pre;
@@ -241,13 +240,13 @@ position:relative;
   font-family: 'Julia Mono';
   font-size:1vw;
   text-align: center;
+  width:auto;
   justify-content: center;
   word-break: keep-all;
-  display:block;
+  /* display:block; */
   white-space: break-spaces;
   overflow-x: auto;
   overflow-wrap: normal;
-  margin:8px 8px 8px 8px;
   padding: 6px;
   cursor:pointer;
 }
