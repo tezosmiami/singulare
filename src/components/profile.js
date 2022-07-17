@@ -15,24 +15,24 @@ const breakpointColumns = {
 };
 
 export const getAddressbyName = gql`
-query alias($name: String!) {
-  tzprofiles(where: {alias: {_eq: $name}) {
+query alias($param: String!) {
+  tzprofiles(where: {alias: {_eq: $param}}) {
       account
       twitter
     }
   }
 `
 
-export const getAddressbySubjkt = `
-query subjkt($address: String!) {
-  hic_et_nunc_holder(where: { name: {_eq: $address}}) {
+export const getAddressbySubjkt = gql`
+query subjkt($param: String!) {
+  hic_et_nunc_holder(where: { name: {_eq: $param}}) {
     address
   }
 }
 `
 export const getObjkts = gql`
-query walletName($address: String!) {
-    created: tokens(where: {artist_address: {_eq: $address}, artifact_uri: {_is_null: false}, mime_type: {_is_null: false}, editions: {_eq: "1"}, fa2_address: {_neq: "KT1EpGgjQs73QfFJs9z7m1Mxm5MTnpC2tqse"}}, order_by: {minted_at: desc}) {
+query walletName($param: String!) {
+    created: tokens(where: {artist_address: {_eq: $param}, artifact_uri: {_is_null: false}, mime_type: {_is_null: false}, editions: {_eq: "1"}, fa2_address: {_neq: "KT1EpGgjQs73QfFJs9z7m1Mxm5MTnpC2tqse"}}, order_by: {minted_at: desc}) {
       artifact_uri
       display_uri
       artist_address
@@ -49,7 +49,7 @@ query walletName($address: String!) {
     }
   
 
-  collected: tokens(where: {holdings: {holder_address: {_eq: $address}, amount: {_gte: "1"}}, artifact_uri: {_is_null: false}, mime_type: {_is_null: false}, artist_address: {_neq: $address}, editions: {_eq: "1"}}, order_by: {minted_at: desc}) {
+  collected: tokens(where: {holdings: {holder_address: {_eq: $param}, amount: {_gte: "1"}}, artifact_uri: {_is_null: false}, mime_type: {_is_null: false}, artist_address: {_neq: $param}, editions: {_eq: "1"}}, order_by: {minted_at: desc}) {
     artifact_uri
     artist_address
     display_uri
@@ -62,8 +62,8 @@ query walletName($address: String!) {
 }
 ` 
    
-const fetcher = (key, query, address) => request(process.env.REACT_APP_TEZTOK_API, query, {address})
-const hicFetcher = (key, query, address) => request(process.env.REACT_APP_HICDEX_API, query, {address})
+const fetcher = (key, query, param) => request(process.env.REACT_APP_TEZTOK_API, query, {param})
+const hicFetcher = (key, query, param) => request(process.env.REACT_APP_HICDEX_API, query, {param})
 
 
 export const Profile = ({banned}) => {
@@ -72,7 +72,7 @@ export const Profile = ({banned}) => {
   const [offset, setOffset] = useState(0)
   const { account } = useParams();
   const { data: alias, error: aliasError } = useSWR(account.length !== 36 ? ['/api/name', getAddressbyName, account] : null, fetcher)
-  const { data: subjkt, error: subjktError } = useSWR(account.length !== 36 ? ['/api/subjkt', getAddressbySubjkt, account.replace(/\s+/g, '')] : null, hicFetcher)
+  const { data: subjkt, error: subjktError } = useSWR(account.length !== 36 ? ['/api/subjkt', getAddressbySubjkt, account.toLowerCase().replace(/\s+/g, '')] : null, hicFetcher)
   const address = account?.length === 36 ? account : alias?.tzprofiles[0]?.account || subjkt?.hic_et_nunc_holder[0]?.address || null
   const { data, error } = useSWR(address?.length === 36 ? ['/api/profile', getObjkts, address] : null, fetcher, { refreshInterval: 15000 })
 
