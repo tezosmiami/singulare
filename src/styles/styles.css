@@ -239,7 +239,7 @@ position:relative;
 .textObjkt{
   font-family: 'Julia Mono';
   font-size:1vw;
-  text-align: center;
+  /* text-align: center; */
   width:auto;
   justify-content: center;
   word-break: keep-all;
