@@ -20,9 +20,7 @@ export const Objkt = ({banned}) => {
         display_uri
         creators
         name
-        symbol
         description
-        minted_at
         minter_profile {
           alias
           twitter
@@ -41,6 +39,12 @@ export const Objkt = ({banned}) => {
           contract_address
           ask_id
           type
+        }
+        holdings {
+          holder_profile {
+            alias
+            account
+          }
         }
       }
     }  
@@ -121,11 +125,16 @@ return(
               params.contract === 'KT1LjmAdYQCLBjwv4S2oFkEzyHVkomAf5MrW' ? `https://versum.xyz/token/versum/${params.id}` 
              : `https://objkt.com/asset/${params.contract}/${params.id}`} target="blank"  rel="noopener noreferrer">   */}
             <div>
+            
             <Link to={`/${objkt.minter_profile?.alias || objkt.artist_address}`}>created by:  {objkt.minter_profile?.alias
                ? objkt.minter_profile?.alias : objkt?.artist_address ? objkt.artist_address?.substr(0, 5) + ". . ." + objkt.artist_address?.substr(-5) :   `${objkt.creators[0]}, ${objkt.creators[1]}`}</Link>
-            <p>{objkt.price > 0 ?
-                 <a onClick={handleCollect()}>{`collect for ${objkt.price/1000000}ꜩ`}</a>
-                    : 'not for sale'} - <a href={objkt.platform ==='HEN' ? `https://hicetnunc.miami/objkt/${params.id}` 
+           <p>[-]</p>
+            <div>{objkt.price > 0 ?
+                 <div onClick={handleCollect()}>
+                   {`collect for ${objkt.price/1000000}ꜩ`}
+                  <a className='center'>-</a>
+                 </div> : ''} 
+                 <a href={objkt.platform ==='HEN' ? `https://hicetnunc.miami/objkt/${params.id}` 
                     : objkt.platform === 'VERSUM' ? `https://versum.xyz/token/versum/${params.id}` 
                     : objkt.platform === '8BIDOU' && objkt.eightbid_rgb.length < 800 ? `https://ui.8bidou.com/item/?id=${params.id}` 
                     : objkt.platform === '8BIDOU' &&  objkt.eightbid_rgb.length > 800 ? `https://ui.8bidou.com/item_r/?id=${params.id}` 
@@ -134,9 +143,12 @@ return(
                     
                     {objkt.platform === 'HEN' ? 'H=N' : objkt.platform === "VERSUM" ? objkt.platform 
                     : objkt.platform === '8BIDOU' ? '8BiDOU'
-                    : objkt.platform === 'TYPED' ? 'TYPEDART' :'OBJKT'}</a></p>
+                    : objkt.platform === 'TYPED' ? 'TYPEDART' :'OBJKT'}</a>
+                </div>
             </div>
-          {/* </a> */}
+            {objkt.holdings[objkt.holdings.length-1].holder_profile.account != objkt.artist_address
+             && <Link to={`/${objkt.holdings[objkt.holdings.length-1].holder_profile.alias || objkt.holdings[objkt.holdings.length-1].holder_profile.account}`}><p>curated by: {objkt.holdings[objkt.holdings.length-1].holder_profile.alias || objkt.holdings[objkt.holdings.length-1].holder_profile.account}</p></Link>}
+            {/* {console.log(objkt)} */}
             {message}
              <div style= {{borderBottom: '6px dotted', width: '63%', marginTop:'27px'}} />
         <div style= {{borderBottom: '6px dotted', width: '63%', marginBottom: '33px'}} />

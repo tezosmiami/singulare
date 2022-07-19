@@ -49,7 +49,7 @@ query walletName($param: String!) {
     }
   
 
-  collected: tokens(where: {holdings: {holder_address: {_eq: $param}, amount: {_gte: "1"}}, artifact_uri: {_is_null: false}, mime_type: {_is_null: false}, artist_address: {_neq: $param}, editions: {_eq: "1"}}, order_by: {minted_at: desc}) {
+  curated: tokens(where: {holdings: {holder_address: {_eq: $param}, amount: {_gte: "1"}}, artifact_uri: {_is_null: false}, mime_type: {_is_null: false}, artist_address: {_neq: $param}, editions: {_eq: "1"}}, order_by: {minted_at: desc}) {
     artifact_uri
     artist_address
     display_uri
@@ -84,7 +84,7 @@ export const Profile = ({banned}) => {
   // const owned = data.alias.length > 0 ? data.alias : data.pk;
   
   const filteredcreated = data?.created.filter((i) => !banned.includes(i.artist_address))
-  const filteredcollected = data?.collected.filter((i) => !banned.includes(i.artist_address))
+  const filteredcurated = data?.curated.filter((i) => !banned.includes(i.artist_address))
 
   //   totalpixils?.length > 0 && totalpixils.sort(function (a, b) {
 //     return b.opid - a.opid;
@@ -119,13 +119,13 @@ export const Profile = ({banned}) => {
        <div>
           <p></p>
        </div>
-       {filteredcollected.length > 0 && <p>collected:</p>}
+       {filteredcurated.length > 0 && <p>curated:</p>}
        <div className='container'>
        <Masonry
         breakpointCols={breakpointColumns}
-        className={filteredcollected.length == 1 ? '' : 'grid'}
+        className={filteredcurated.length == 1 ? '' : 'grid'}
          columnClassName='column'>
-        {filteredcollected && filteredcollected.map(p=> (
+        {filteredcurated && filteredcurated.map(p=> (
         <Link  key={p.artifact_uri+p.token_id} to={`/${p.fa2_address}/${p.token_id}`}>
         {p.mime_type.includes('image') && p.mime_type !== 'image/svg+xml' ?
         <img alt='' className= 'pop'  src={`https://ipfs.io/ipfs/${p.display_uri ? p.display_uri?.slice(7) : p.artifact_uri.slice(7)}`}/> 
