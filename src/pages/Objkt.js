@@ -108,7 +108,11 @@ return(
          </a>
       </div>
     // </a> 
-    
+    : objkt?.mime_type?.includes('audio') ?  
+    <div className='view'>
+       <img className='view' style={{width:'90%', margin: '18px'}} src={'https://ipfs.io/ipfs/' + objkt.display_uri.slice(7)} />
+      <audio  src={'https://ipfs.io/ipfs/' + objkt.artifact_uri.slice(7)} controls />
+    </div>
     :  objkt.mime_type.includes('text') ? <a className='view' href = {`https://ipfs.io/ipfs/${objkt.artifact_uri.slice(7)}`} target='blank'  rel='noopener noreferrer'><div className='textObjkt'>{objkt.description}</div></a> : null}
     <div>
     <div style= {{borderBottom: '6px dotted', width: '63%', marginTop:'33px'}} />
@@ -147,7 +151,7 @@ return(
                 </div>
             </div>
             {objkt.holdings[objkt.holdings.length-1].holder_address != objkt.artist_address
-             && <Link to={`/${objkt.holdings[objkt.holdings.length-1].holder_profile.alias || objkt.holdings[objkt.holdings.length-1].holder_address}`}><p>curated by: {objkt.holdings[objkt.holdings.length-1].holder_profile.alias || objkt.holdings[objkt.holdings.length-1].holder_address}</p></Link>}
+             && <Link to={`/${objkt.holdings[objkt.holdings.length-1]?.holder_profile?.alias || objkt.holdings[objkt.holdings.length-1].holder_address}`}><p>curated by: {objkt.holdings[objkt.holdings.length-1].holder_profile?.alias || objkt.holdings[objkt.holdings.length-1].holder_address}</p></Link>}
             {/* {console.log(objkt)} */}
             {message}
              <div style= {{borderBottom: '6px dotted', width: '63%', marginTop:'27px'}} />

@@ -89,6 +89,7 @@ export const Profile = ({banned}) => {
   //   totalpixils?.length > 0 && totalpixils.sort(function (a, b) {
 //     return b.opid - a.opid;
 //   });
+
     return (
       <>
         <a style={{fontSize:'27px'}} href={alias?.tzprofiles[0]?.twitter ? `https://twitter.com/${alias.tzprofiles[0].twitter}`: null} target="blank"  rel="noopener noreferrer">
@@ -106,9 +107,14 @@ export const Profile = ({banned}) => {
            {p.mime_type.includes('image') && p.mime_type !== 'image/svg+xml' ?
            <img alt='' className= 'pop' src={`https://ipfs.io/ipfs/${p.display_uri ? p.display_uri?.slice(7) : p.artifact_uri.slice(7)}`}/> 
            : p.mime_type.includes('video') ? 
-            <div  className='pop'>
+            <div className='pop'>
               <ReactPlayer url={'https://ipfs.io/ipfs/' + p?.artifact_uri?.slice(7)} width='100%' height='100%' muted={true} playing={true} loop={true}/>
              </div>
+            : p.mime_type.includes('audio') ?  
+              <div className= 'pop'>
+                <img className= 'pop' src={'https://ipfs.io/ipfs/' + p.display_uri.slice(7)} />
+                <audio style={{width:'93%'}} src={'https://ipfs.io/ipfs/' + p.artifact_uri.slice(7)} controls />
+              </div>
            : p.mime_type.includes('text') ? <div className='text'>{p.description}</div> : ''}
             </Link>
              ))}
@@ -132,6 +138,11 @@ export const Profile = ({banned}) => {
         : p.mime_type.includes('video') ? 
          <div className='pop'>
            <ReactPlayer url={'https://ipfs.io/ipfs/' + p.artifact_uri.slice(7)} width='100%' height='100%' muted={true} playing={true} loop={true}/>
+          </div>
+          : p.mime_type.includes('audio') ?  
+          <div className= 'pop'>
+            <img className= 'pop' src={'https://ipfs.io/ipfs/' + p.display_uri.slice(7)} />
+            <audio style={{width:'93%'}} src={'https://ipfs.io/ipfs/' + p.artifact_uri.slice(7)} controls />
           </div>
         : p.mime_type.includes('text') ? <div className='text'>{p.description}</div> : ''}
          </Link>
