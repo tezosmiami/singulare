@@ -151,7 +151,7 @@ return(
                 </div>
             </div>
             {objkt.holdings[objkt.holdings.length-1].holder_address != objkt.artist_address
-             && <Link to={`/${objkt.holdings[objkt.holdings.length-1]?.holder_profile?.alias || objkt.holdings[objkt.holdings.length-1].holder_address}`}><p>curated by: {objkt.holdings[objkt.holdings.length-1].holder_profile?.alias || objkt.holdings[objkt.holdings.length-1].holder_address}</p></Link>}
+             && <Link to={`/${objkt.holdings[objkt.holdings.length-1]?.holder_profile?.alias || objkt.holdings[objkt.holdings.length-1].holder_address}`}><p>curated by: {objkt.holdings[objkt.holdings.length-1].holder_profile?.alias || objkt.holdings[objkt.holdings.length-1]?.holder_address.substr(0, 5) + ". . ." + objkt.holdings[objkt.holdings.length-1]?.holder_address.substr(-5)}</p></Link>}
             {/* {console.log(objkt)} */}
             {message}
              <div style= {{borderBottom: '6px dotted', width: '63%', marginTop:'27px'}} />
