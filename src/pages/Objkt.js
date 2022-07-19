@@ -41,9 +41,9 @@ export const Objkt = ({banned}) => {
           type
         }
         holdings {
+          holder_address
           holder_profile {
             alias
-            account
           }
         }
       }
@@ -146,8 +146,8 @@ return(
                     : objkt.platform === 'TYPED' ? 'TYPEDART' :'OBJKT'}</a>
                 </div>
             </div>
-            {objkt.holdings[objkt.holdings.length-1].holder_profile.account != objkt.artist_address
-             && <Link to={`/${objkt.holdings[objkt.holdings.length-1].holder_profile.alias || objkt.holdings[objkt.holdings.length-1].holder_profile.account}`}><p>curated by: {objkt.holdings[objkt.holdings.length-1].holder_profile.alias || objkt.holdings[objkt.holdings.length-1].holder_profile.account}</p></Link>}
+            {objkt.holdings[objkt.holdings.length-1].holder_address != objkt.artist_address
+             && <Link to={`/${objkt.holdings[objkt.holdings.length-1].holder_profile.alias || objkt.holdings[objkt.holdings.length-1].holder_address}`}><p>curated by: {objkt.holdings[objkt.holdings.length-1].holder_profile.alias || objkt.holdings[objkt.holdings.length-1].holder_address}</p></Link>}
             {/* {console.log(objkt)} */}
             {message}
              <div style= {{borderBottom: '6px dotted', width: '63%', marginTop:'27px'}} />
