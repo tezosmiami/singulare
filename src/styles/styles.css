@@ -259,8 +259,11 @@ position:relative;
   transition-duration: .3s;
 }
 
-audio::-webkit-media-controls-play-button,
-     audio::-webkit-media-controls-panel {
+audio::-webkit-media-controls-panel {
      background-color: var(--background);
-     color: var(--text);
-     }
+}
+  
+audio::-webkit-media-controls-play-button {
+      background-color:  #e8e8e8;
+      border-radius: 50%;
+}
