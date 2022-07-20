@@ -110,8 +110,8 @@ return(
     // </a> 
     : objkt?.mime_type?.includes('audio') ?  
     <div className='view'>
-       <img className='view' style={{width:'90%', margin: '18px'}} src={'https://ipfs.io/ipfs/' + objkt.display_uri.slice(7)} />
-      <audio  src={'https://ipfs.io/ipfs/' + objkt.artifact_uri.slice(7)} controls />
+       <img className='view' style={{width:'90%', margin: '12px'}} src={'https://ipfs.io/ipfs/' + objkt.display_uri.slice(7)} />
+      <audio  style={{ margin: '6px'}}src={'https://ipfs.io/ipfs/' + objkt.artifact_uri.slice(7)} controls />
     </div>
     :  objkt.mime_type.includes('text') ? <a className='view' href = {`https://ipfs.io/ipfs/${objkt.artifact_uri.slice(7)}`} target='blank'  rel='noopener noreferrer'><div className='textObjkt'>{objkt.description}</div></a> : null}
     <div>
