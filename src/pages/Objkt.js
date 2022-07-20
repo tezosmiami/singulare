@@ -40,7 +40,7 @@ export const Objkt = ({banned}) => {
           ask_id
           type
         }
-        holdings {
+        holdings(where: {amount: {_gt: "0"}}, order_by: {first_received_at: asc}) {
           holder_address
           holder_profile {
             alias
