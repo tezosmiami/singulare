@@ -26,7 +26,7 @@ function App() {
     setBanned(result.data)
   }
     getBanned();
-  }, [])
+  }, [axios])
   return(
     <>
     <header>
@@ -34,7 +34,7 @@ function App() {
       {/* {app.address && <a href={`https://hicetnunc.miami/tz/${app.address}`}
       target="blank" rel="noopener noreferrer"> 
        */}
-        {app.name.length > 0 && app.name + ' / '|| app.address.substr(0, 4) + "..." + app.address.substr(-4)+' / '}
+        {(app.name.length > 0 && app.name + ' / ') || (app.address.substr(0, 4) + "..." + app.address.substr(-4)+' / ')}
       {/* </a>} */}
       </Link>}
     

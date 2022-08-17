@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { request, gql } from 'graphql-request'
-import { useNavigate, useSearchParams, Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import ReactPlayer from 'react-player'
 import Masonry from 'react-masonry-css'
 
@@ -66,7 +66,7 @@ export const Search = ({returnSearch, query, banned}) => {
   
 
     const handleKey = (e) => {
-        if (e.key == 'Enter') { 
+        if (e.key === 'Enter') { 
             setSearch(e.target.value.toLowerCase())
             setInput('')
         }
@@ -97,7 +97,7 @@ export const Search = ({returnSearch, query, banned}) => {
         }
         }
         getObjkts();
-    }, [search, banned, offset])
+    }, [search, banned, offset, navigate, returnSearch])
 
     // if (search && !loading) return (<div>empty return. . .</div>)
     // if (loading) return 'loading. . .'
@@ -134,7 +134,7 @@ export const Search = ({returnSearch, query, banned}) => {
                 <ReactPlayer className='pop' url={p.artifact_uri?.slice(7)} width='100%' height='100%' muted={true} playing={true} loop={true}/>
                 : p.mime_type.includes('audio') ?  
                 <div className= 'pop'>
-                  <img className= 'pop' src={'https://ipfs.io/ipfs/' + p.display_uri.slice(7)} />
+                  <img className= 'pop' alt='' src={'https://ipfs.io/ipfs/' + p.display_uri.slice(7)} />
                   <audio style={{width:'93%'}} src={'https://ipfs.io/ipfs/' + p.artifact_uri.slice(7)} controls />
                 </div>
                 : p.mime_type.includes('text') ? <div className='text'>{p.description}</div> : ''}

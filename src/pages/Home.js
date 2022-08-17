@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Main } from '../components/main';
 import { Search } from '../components/search';
 import { useSearchParams } from 'react-router-dom';
-import ToggleSwitch from '../components/toggle';
+// import ToggleSwitch from '../components/toggle';
 
 export const Home = ({banned}) => {
-  const [toggled, setToggled ] = useState(false);
+  // const [toggled, setToggled ] = useState(false);
   const [searchData,setSearchData] = useState([]);
   const [searchParams] = useSearchParams();
 

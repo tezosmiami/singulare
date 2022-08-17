@@ -1,8 +1,6 @@
 import { useEffect, useState, createContext, useContext} from "react";
 import { TezosToolkit } from "@taquito/taquito";
 import { BeaconWallet } from "@taquito/beacon-wallet";
-import { parse } from "graphql";
-import { Objkt } from "../pages/Objkt";
 
 
 const querySubjkt = `
