@@ -268,3 +268,12 @@ audio::-webkit-media-controls-play-button {
       background-color:  #e8e8e8;
       border-radius: 50%;
 }
+
+.fields{
+  display: block;
+  width: 100%;
+  background-color: var(--text);
+  color: var(--background);
+  text-align: center;
+ 
+}

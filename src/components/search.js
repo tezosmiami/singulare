@@ -129,7 +129,7 @@ export const Search = ({returnSearch, query, banned}) => {
        {query && objkts?.length > 0 && objkts.map(p=> (
             <Link className='center' key={p.artifact_uri+p.token_id} to={`/${p.fa2_address}/${p.token_id}`}>
               {p.mime_type.includes('image') && p.mime_type !== 'image/svg+xml' ?
-              <img alt='' className= 'pop' src={`https://gateway.ipfs.io/ipfs/${p.display_uri ? p.display_uri?.slice(7) : p.artifact_uri.slice(7)}`}/> 
+              <img alt='' className= 'pop' src={`https://ipfs.io/ipfs/${p.display_uri ? p.display_uri?.slice(7) : p.artifact_uri.slice(7)}`}/> 
                 : p.mime_type.includes('video') ?
                 <ReactPlayer className='pop' url={p.artifact_uri?.slice(7)} width='100%' height='100%' muted={true} playing={true} loop={true}/>
                 : p.mime_type.includes('audio') ?  

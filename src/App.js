@@ -4,6 +4,7 @@ import { Routes, Route, Link } from "react-router-dom";
 import { Home } from './pages/Home'
 import { Gallery } from './pages/Gallery'
 import { Objkt } from './pages/Objkt'
+import { Mint } from './pages/Mint'
 import { LightButton } from './components/light-button';
 import "./styles/styles.css";
 
@@ -52,6 +53,7 @@ function App() {
      <Routes>
         <Route path="/" element={<Home banned={banned} />} />
         <Route path='/:account' element={<Gallery banned={banned}/>} />
+        <Route path='/Mint' element={<Mint/>} />
         <Route path=":contract" >
           <Route path=":id" element={<Objkt banned={banned}/>} />
        </Route>

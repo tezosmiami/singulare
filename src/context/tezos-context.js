@@ -130,6 +130,7 @@ export const TezosContextProvider = ({ children }) => {
     return true;
 };
 
+
   const wrapped = { ...app, tezos, collect, logIn, logOut, activeAccount, address, name};
 
   return (
