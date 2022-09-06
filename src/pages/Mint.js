@@ -1,77 +1,31 @@
 import React, { useState } from 'react';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
-import * as yup from 'yup';
-import styles from '../styles/minter.module.css';
-import { useTezosContext } from "../context/tezos-context";
+import { useTezosContext } from '../context/tezos-context'
+import { setMetadata }  from '../utils/ipfs'
 import Dropzone from 'react-dropzone'
+import * as yup from 'yup'
 import App from '../App';
 
-const MAX_EDITIONS = 10000;
-const MIN_ROYALTIES = 10;
-const MAX_ROYALTIES = 25;
-const MAX_AUDIO_SIZE_BYTES = 1_000_000_00;
-const MAX_COVER_SIZE_BYTES = 1_000_000_0;
-const MAX_THUMB_SIZE_BYTES = 1_000_000;
-const ALLOWED_AUDIO_TYPES = [
-    'audio/wav',
-    'audio/ogg',
-    'audio/mpeg',
-    "audio/x-wav"
-];
-const ALLOWED_IMAGE_TYPES = [
-    'image/png',
-    'image/jpeg',
-    'image/gif'
-];
+const min_fee = 1;
+const min_price = 0;
+const max_fee = 100;
+
 const mintPayload=''
 const validationSchema = yup.object().shape({
     title: yup.string().required(),
     description: yup.string().required(),
     tags: yup.string().required(),
-    royalties: yup.number()
-        .min(MIN_ROYALTIES)
-        .max(MAX_ROYALTIES),
-    license: yup.string(),
-    licenseUrl: yup.string(),
+    harberger: yup.number().required()
+    .min(min_fee)
+    .max(max_fee),
+    price: yup.number().required()
+    .min(min_price)
 });
 
 const bytesToMb = bytes => bytes / 1_000_000;
 
 
 
-const licenses = {
-    NO: {
-        title: 'No license / All rights reserved'
-    },
-    CCBY: {
-        title: 'Attribution 4.0 International',
-        url: "https://creativecommons.org/licenses/by/4.0/"
-    },
-    CCBYND: {
-        title: 'Attribution-NoDerivatives 4.0 International',
-        url: "http://creativecommons.org/licenses/by-nd/4.0/"
-    },
-    CCBYSA: {
-        title: 'Attribution-ShareAlike 4.0 International',
-        url: "https://creativecommons.org/licenses/by-sa/4.0/"
-    },
-    CCBYNC: {
-        title: 'Attribution-NonCommercial 4.0 International',
-        url: "https://creativecommons.org/licenses/by-nc/4.0/"
-    },
-    CCBYNCND: {
-        title: 'Attribution-NonCommercial-NoDerivatives 4.0 International',
-        url: "https://creativecommons.org/licenses/by-nc-nd/4.0/"
-    },
-    CCBYNCSA: {
-        title: 'Attribution-NonCommercial-ShareAlike 4.0 International',
-        url: "https://creativecommons.org/licenses/by-nc-sa/4.0/"
-    },
-    CC0: {
-        title: 'Public Domain Dedication',
-        url: "https://creativecommons.org/publicdomain/zero/1.0/"
-    },
-}
 
 export const Mint = () => {
     const [mintPayload, setMintPayload] = useState();
@@ -81,9 +35,11 @@ export const Mint = () => {
     const [isPreview, setIsPreview] = useState(false)
     const [preview, setPreview] = useState(null)
     const [loaded, setLoaded] = useState(false)
+    const [message, setMessage] = useState('')
     const app = useTezosContext();
 
     const handleDrop = (file) => {
+      if (!file[0]?.type) return
       setFile(file[0])
       setPreview(URL.createObjectURL(file[0]))
       setLoaded(true)
@@ -93,15 +49,52 @@ export const Mint = () => {
         title: mintPayload?.title || '',
         description: mintPayload?.description || '',
         tags: mintPayload?.tags || '',
-        royalties: mintPayload?.royalties || '',
+        harberger: mintPayload?.harberger || '',
         audio: mintPayload?.audio || '',
         cover: mintPayload?.cover || '',
         thumbnail: mintPayload?.thumbnail || '',
-        license: mintPayload?.license || '',
-        licenseUrl: mintPayload?.licenseUrl || '',
+        price: mintPayload?.price || '',
+
     };
-    const handleSubmit = (values) => {
+    const handleMint = async () => {
+        setMessage('Ipfs. . .')
+        console.log(file)
+        await setMetadata({values: mintPayload , file: file, setMessage})
+        setMessage('Minting. . .');
+        // const isSuccessful = await app.mint(auth.address, p.amount, nftCid.substr(7), p.royalties);
+        // setMessage(isSuccessful ? 'Completed' : 'Failed to mint');
+        setTimeout(() => {
+            setMessage(null);
+        }, 2000)
+    };
+
+
+
+
+
+            // let isMinted = ''
+            // !app.address && setMessage('please sync. . .') 
+            //   if(app.address) try {
+            //       setMessage('ready wallet. . .');
+            //       isMinted = await app.mint(mintPayload)
+            //       setMessage(isMade ? 'Congratulations - Market Made!' : 'transaction issues - try again. . .');
+                
+            //   } catch(e) {
+            //       setMessage('errors. . .');
+            //       console.log('Error: ', e);
+            //   }
+            //   setTimeout(() => {
+            //       setMessage(null)
+            //   }, 3200)
+            //   setMarketPayload({fa2s,values})
+            //   isMade && navigate('/')
+            // }
+            
+           
+       
+    const handleSubmit = (values) => { 
         setIsMinting(false)
+        values.address=app.address
         setMintPayload(values);
         setIsPreview(true)
         setIsForm(false);
@@ -112,28 +105,27 @@ export const Mint = () => {
         // handleMint(mintPayload);
     };
     
-    const handleDropdownChange = (formik) => (event) => {
-        let key = event.target.value;
-        formik.setFieldValue('license', licenses[key].title);
-        formik.setFieldValue('licenseUrl', licenses[key].url);
-    };
-
     
     if(!app.address) return(<p>please sync to mint</p>, <p/>)
 console.log(isPreview)
     return (
         <div >
-            <Dropzone maxFiles={1} onDrop={file => handleDrop(file)}>
+            <Dropzone multiple={false}  
+            accept={{
+                   'image/*': ['.jpeg', '.png', '.gif'], 'video/*': ['.mp4']
+                 }} 
+                onDrop={file => handleDrop(file)}>
                 {({getRootProps, getInputProps}) => (
-                 
+               
                     <div {...getRootProps()}>
-                 
+                       
                         { !loaded ? (<input {...getInputProps()} />,
                         <div className='view'> 
-                        <p>Drag 'n' drop file here - or click to select</p>
-                        <p>[jpeg, png, gif, mp4, mp3, wav]</p></div>) 
+                        <p>drag 'n' drop file here - or click to select</p>
+                        <p>[jpeg, png, gif, mp4]</p></div>) 
+    
                         : file.type.includes('image') ? <img className='view' src={preview} />
-                        : file.type.includes('video') ? <video className='view' src={preview}  controls autoplay/>
+                        : file.type.includes('video') ? <video className='view' src={preview}  controls autoPlay/>
                         : null}
                    
                     </div>
@@ -148,10 +140,10 @@ console.log(isPreview)
                 validationSchema={validationSchema}
             >
                 {(formik) =>
-                    <Form className={styles.form} >
-                        <div className={styles.formField}>
+                    <Form className='form' >
+                        <div className='formField'>
                             <label
-                                className={styles.label}
+                                className='label'
                                 htmlFor={'title'}
                             >Title</label>
                             <Field
@@ -162,30 +154,30 @@ console.log(isPreview)
                             />
                             <ErrorMessage
                                 component="span"
-                                className={styles.errorMessage}
+                                className='errorMessage'
                                 name="title"
                             />
                         </div>
-                        <div className={styles.formField}>
+                        <div className='formField'>
                             <label
-                                className={styles.label}
+                                className='label'
                                 htmlFor={'description'}
                             >Description</label>
                             <Field
-                                className={'fields'}
+                                className='fields'
                                 id="description"
                                 name="description"
                                 component="textarea"
                             />
                             <ErrorMessage
                                 component="span"
-                                className={styles.errorMessage}
+                                className='errorMessage'
                                 name="description"
                             />
                         </div>
-                        <div className={styles.formField}>
+                        <div className='formField'>
                             <label
-                                className={styles.label}
+                                className='label'
                                 htmlFor={'tags'}
                             >Tags</label>
                             <Field
@@ -197,62 +189,56 @@ console.log(isPreview)
                             />
                             <ErrorMessage
                                 component="span"
-                                className={styles.errorMessage}
+                                className='errorMessage'
                                 name="tags"
                             />
                         </div>
                        
-                        <div className={styles.formField}>
+            
+                     
+                        <div className='formField'>
                             <label
-                                className={styles.label}
-                                htmlFor={'royalties'}
-                            >Royalties</label>
+                                className='label'
+                                htmlFor={'harberger'}
+                            >Harberger Fee</label>
                             <Field
                                 className='fields'
-                                id="royalties"
-                                name="royalties"
+                                id="harberger"
+                                name="harberger"
                                 type="number"
-                                min={MIN_ROYALTIES}
-                                max={MAX_ROYALTIES}
-                                placeholder={`royalties after each sale (between ${MIN_ROYALTIES}-${MAX_ROYALTIES}%)`}
+                                min={min_fee}
+                                max={max_fee}
+                                placeholder={`percentage of sale price as harberger fee (between ${min_fee}-${max_fee}%)`}
                             />
                             <ErrorMessage
                                 component="span"
-                                className={styles.errorMessage}
-                                name="royalties"
+                                className='errorMessage'
+                                name="harberger"
                             />
                         </div>
-                        <div className={styles.formField} >
+                        <div className='formField'>
                             <label
-                                className={styles.label}
-                                htmlFor={'license'}
-                            >Select a license</label>
-                            <select
-                                className={styles.dropdown}
-                                onChange={handleDropdownChange(formik)}
-                            >
-                                <option value="NO">No License / All Rights Reserved</option>
-                                <option value="CCBY">CC BY</option>
-                                <option value="CCBYND">CC BY-ND</option>
-                                <option value="CCBYSA">CC BY-SA</option>
-                                <option value="CCBYNC">CC BY-NC</option>
-                                <option value="CCBYNCND">CC BY-NC-ND</option>
-                                <option value="CCBYNCSA">CC BY-NC-SA</option>
-                                <option value="CC0">CCO (Public Domain)</option>
-                            </select>
-                            <div>
-                                {formik.values.licenseUrl && <a href={formik.values.licenseUrl} target="_blank" rel="noopener noreferrer"><u>{formik.values.license}</u></a>}
-                            </div>
+                                className='label'
+                                htmlFor={'price'}
+                            >Initial Price</label>
+                            <Field
+                                className='fields'
+                                id="price"
+                                name="price"
+                                type="number"
+                                min={min_price}
+                                placeholder={`price for initial sale`}
+                            />
                             <ErrorMessage
                                 component="span"
-                                className={styles.errorMessage}
-                                name="license"
+                                className='errorMessage'
+                                name="price"
                             />
                         </div>
                         <p/>
                         <div>
                         <button
-                            // className={styles.formButton}
+                            // className='formButton'
                             type="submit"
                         >Preview
                         </button>
@@ -269,14 +255,15 @@ console.log(isPreview)
                 <div style= {{borderBottom: '6px dotted', width: '63%', marginBottom: '27px'}} />
                <p>{mintPayload.description}</p>
                <div style= {{borderBottom: '6px dotted', width: '63%', marginTop:'27px'}} />               
-           <p>created by: {`${app.alias || app.address.substr(0, 4) + ". . ." + app.address.substr(-4)}`}</p>
-            <o>Royalties: {mintPayload.royalties}%</o>
+           <p>Created by: {`${app.alias || app.address.substr(0, 4) + ". . ." + app.address.substr(-4)}`}</p>
+            <p>Harberger  Fee: {mintPayload.harberger}%</p>
+            <p>Initial Price: {mintPayload.price} ꜩ</p>
             <p>[-]</p>
-            <p>S1NGULARE</p>
+            <p>Harberger x S1NGULARE</p>
           
             <div style= {{borderBottom: '6px dotted', width: '63%', marginTop:'27px'}} />
         <div style= {{borderBottom: '6px dotted', width: '63%', marginBottom: '33px'}} />
-        <button>[ ::  Mint  :: ]<p/></button> <button style={{fontSize: '27px'}} onClick={() => setIsPreview(false)}>{`<`}<p/></button>
+        <button onClick={()=> handleMint()}>[ ::  Mint  :: ]<p/></button> <button style={{fontSize: '27px'}} onClick={() => setIsPreview(false)}>{`<`}<p/></button>
         </div>}
         </div>
     );

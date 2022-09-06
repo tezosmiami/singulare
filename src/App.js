@@ -40,7 +40,7 @@ function App() {
       </Link>}
     
   
-      <button onClick={() => !app.activeAccount ? app.logIn() : app.logOut()}> 
+      <button onClick={() => !app.activeAccount ? app.sync() : app.unsync()}> 
         {!app.activeAccount ? "sync" : "unsync"}
       </button>
 

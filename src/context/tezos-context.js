@@ -1,8 +1,6 @@
 import { useEffect, useState, createContext, useContext} from "react";
 import { TezosToolkit } from "@taquito/taquito";
 import { BeaconWallet } from "@taquito/beacon-wallet";
-import { parse } from "graphql";
-import { Objkt } from "../pages/Objkt";
 
 
 const querySubjkt = `
@@ -72,7 +70,7 @@ export const TezosContextProvider = ({ children }) => {
       getLoggedIn();
     }, [tezos]);
   
-  async function logIn() {
+  async function sync() {
     app.currentWallet && await app.currentWallet?.logOut();
     await wallet.client.clearActiveAccount();
     await wallet.client.requestPermissions({
@@ -97,12 +95,16 @@ export const TezosContextProvider = ({ children }) => {
    
   }
 
-  async function logOut() {
+  async function unsync() {
     await wallet.client.clearActiveAccount();
     setActiveAccount("")
     setAddress("");
     setName("")
     //  window.location.reload();
+  }
+
+  async function mint({mintPayload}) {
+    
   }
 
   async function collect({swap_id, price, contract, platform}) {
@@ -131,7 +133,7 @@ export const TezosContextProvider = ({ children }) => {
 };
 
 
-  const wrapped = { ...app, tezos, collect, logIn, logOut, activeAccount, address, name};
+  const wrapped = { ...app, tezos, collect, mint, sync, unsync, activeAccount, address, name};
 
   return (
    

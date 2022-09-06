@@ -78,13 +78,13 @@ a{
 }
 .purple{
     color: var(--text);
-    font-size: 38px;
+    font-size: 33px;
     font-family: var(--font);
   }
 
 @media screen and (min-width: 550px) {
   .purple{
-    font-size:58px;
+    font-size:48px;
   }
 }
 .container{
@@ -162,7 +162,12 @@ input:focus {
 
 ::-webkit-input-placeholder{
   color:gray;
-  text-indent: 65px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .inline{
@@ -276,4 +281,36 @@ audio::-webkit-media-controls-play-button {
   color: var(--background);
   text-align: center;
  
+}
+
+.formField {
+  padding-bottom: 16px;
+  width:100%;
+}
+
+.label {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.input {
+  display: block;
+  width: 100%;
+  background-color: --var(text);
+}
+
+.formButton {
+  padding: 4px 8px;
+  margin-top: 30px;
+  justify-content:center;
+}
+
+.form{
+    width:38vw;
+}
+.errorMessage {
+  display: block;
+  margin-top: 4px;
+  color: #cd0117;
+  font-size: 14px;
 }
