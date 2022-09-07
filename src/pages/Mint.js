@@ -40,8 +40,16 @@ export const Mint = () => {
 
     const handleDrop = (file) => {
       if (!file[0]?.type) return
-      setFile(file[0])
+     
       setPreview(URL.createObjectURL(file[0]))
+      let reader = new window.FileReader();
+     reader.readAsArrayBuffer(file[0]);
+     reader.onloadend = async()=>{
+        console.log(reader.result)
+        file[0].buffer=reader.result
+        console.log(file[0])
+     }
+     setFile(file[0])
       setLoaded(true)
     }
 
@@ -57,12 +65,14 @@ export const Mint = () => {
 
     };
     const handleMint = async () => {
+        setIsMinting(true)
         setMessage('Ipfs. . .')
-        console.log(file)
-        await setMetadata({values: mintPayload , file: file, setMessage})
+        const metadataUri = await setMetadata({values: mintPayload , file: file, setMessage})
+        console.log(metadataUri)
         setMessage('Minting. . .');
-        // const isSuccessful = await app.mint(auth.address, p.amount, nftCid.substr(7), p.royalties);
-        // setMessage(isSuccessful ? 'Completed' : 'Failed to mint');
+        const isSuccessful = await app.mint(metadataUri, mintPayload.price, mintPayload.harberger);
+        setMessage(isSuccessful ? 'Completed' : 'Failed to mint');
+        setIsMinting(false)
         setTimeout(() => {
             setMessage(null);
         }, 2000)
@@ -100,11 +110,7 @@ export const Mint = () => {
         setIsForm(false);
         console.log(values)
     };
-    const triggerMint = () => {
-        setIsMinting(true)
-        // handleMint(mintPayload);
-    };
-    
+   
     
     if(!app.address) return(<p>please sync to mint</p>, <p/>)
 console.log(isPreview)
@@ -264,6 +270,7 @@ console.log(isPreview)
             <div style= {{borderBottom: '6px dotted', width: '63%', marginTop:'27px'}} />
         <div style= {{borderBottom: '6px dotted', width: '63%', marginBottom: '33px'}} />
         <button onClick={()=> handleMint()}>[ ::  Mint  :: ]<p/></button> <button style={{fontSize: '27px'}} onClick={() => setIsPreview(false)}>{`<`}<p/></button>
+            {message}
         </div>}
         </div>
     );

@@ -19,21 +19,18 @@ export const setMetadata = async({values, file, setMessage}) => {
     });
     
     const addToIpfs = async(file) => {
-        console.log(file)
         const hash = await ipfs.add(file);
-        console.log(hash)
         return `ipfs://${hash.path}`;
         };
         
     
-    let reader = new window.FileReader();
-    reader.readAsArrayBuffer(file);
-    reader.onloadend = async () =>{ 
+    // let reader = new window.FileReader();
+    // reader.readAsArrayBuffer(file);
+    // reader.onloadend = async () =>{ 
     setMessage('Uploading to IPFS…');
-    
-    const buffer = await Buffer.from(reader.result);
-    const artifactUri = await addToIpfs(buffer);
-    const displayUri = await addToIpfs(buffer);
+
+    const artifactUri = await addToIpfs(file.buffer);
+    const displayUri = await addToIpfs(file.buffer);
 
     console.log(artifactUri);
     console.log(displayUri);
@@ -61,9 +58,10 @@ export const setMetadata = async({values, file, setMessage}) => {
     console.log(metadata.toString());
     const md = await addToIpfs(metadata);
     console.log(md)
-    return artifactUri
-    }
-};
+    return md
+    
+}
+
 
 
 

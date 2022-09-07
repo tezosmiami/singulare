@@ -1,5 +1,5 @@
 import { useEffect, useState, createContext, useContext} from "react";
-import { TezosToolkit } from "@taquito/taquito";
+import { TezosToolkit, MichelsonMap } from "@taquito/taquito";
 import { BeaconWallet } from "@taquito/beacon-wallet";
 
 
@@ -25,7 +25,8 @@ async function fetchGraphQL(queryObjkts, name, variables) {
 
 const TezosContext = createContext();
 const options = {
-  name: 'S1NGULARE'
+  name: 'S1NGULARE',
+  preferredNetwork: 'jakartanet'
  };
   
 const wallet = new BeaconWallet(options);
@@ -45,7 +46,7 @@ export const TezosContextProvider = ({ children }) => {
   
   const [app, setApp] = useState("");
   const [address, setAddress] = useState("");
-  const [tezos, setTezos] = useState(new TezosToolkit("https://mainnet.api.tez.ie"));
+  const [tezos, setTezos] = useState(new TezosToolkit("https://jakartanet.ecadinfra.com"));
   const [activeAccount, setActiveAccount] = useState("");
   const [name, setName] = useState("")
 
@@ -75,7 +76,8 @@ export const TezosContextProvider = ({ children }) => {
     await wallet.client.clearActiveAccount();
     await wallet.client.requestPermissions({
       network: {
-        type: 'mainnet',
+        type: 'jakartanet',
+
       },
     });
     tezos.setWalletProvider(wallet);
@@ -103,9 +105,38 @@ export const TezosContextProvider = ({ children }) => {
     //  window.location.reload();
   }
 
-  async function mint({mintPayload}) {
-    
-  }
+  const mint = async(metadata, price, fee ) => {
+   
+   const token_metadata = new MichelsonMap()
+   token_metadata.set(
+    '',
+    metadata.split('')
+      .reduce(
+          (hex, c) =>
+              (hex += c.charCodeAt(0)
+                  .toString(16)
+                  .padStart(2, '0')),
+          ''
+      )
+    );
+   console.log(token_metadata)
+    try {
+        const contract = await tezos.wallet
+            .at('KT1CP5pYsaoAjpWfHqJG5PZT7Wn1vfaP31Tt');
+        const operation = await contract.methods.mint(
+            token_metadata,
+            parseFloat(price) * (10**6),
+            parseFloat(fee) * 10
+        ).send({amount: 0, storageLimit: 310});
+        await operation.confirmation(1);
+        console.log('Minted');
+        console.log('Operation hash:', operation.hash);
+    } catch(e) {
+        console.log('Error:', e);
+        return false;
+    }
+    return true;
+};
 
   async function collect({swap_id, price, contract, platform}) {
     console.log(swap_id, platform)
