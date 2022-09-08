@@ -49,7 +49,7 @@ function App() {
      <p>1/1 TEZOS OBJKTS</p>
     <LightButton />
 
-     <div  style={{minHeight: '50vh'}}>
+     <div  style={{minHeight: '44vh'}}>
      <Routes>
         <Route path="/" element={<Home banned={banned} />} />
         <Route path='/:account' element={<Gallery banned={banned}/>} />
