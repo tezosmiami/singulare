@@ -19,7 +19,7 @@ export const Home = ({banned}) => {
         handleToggle={() => setToggled(!toggled)}/>
        {!toggled ? <LatestSales /> : <LatestMints/>} */}
       <Search returnSearch={setSearchData} query={searchParams.get('search')} banned={banned}/>
-
+      
       {!searchParams.get('search') ? <Main banned={banned}/> : null}
 
       </>

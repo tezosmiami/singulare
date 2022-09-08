@@ -122,7 +122,7 @@ export const TezosContextProvider = ({ children }) => {
    console.log(token_metadata)
     try {
         const contract = await tezos.wallet
-            .at('KT1CP5pYsaoAjpWfHqJG5PZT7Wn1vfaP31Tt');
+            .at('KT1LTrTYN53yBeWJ5JmxWhU6u7guzUeJDNVn');
         const operation = await contract.methods.mint(
             token_metadata,
             parseFloat(price) * (10**6),

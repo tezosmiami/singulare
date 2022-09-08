@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect} from 'react';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { useTezosContext } from '../context/tezos-context'
 import { setMetadata }  from '../utils/ipfs'
@@ -36,22 +36,30 @@ export const Mint = () => {
     const [preview, setPreview] = useState(null)
     const [loaded, setLoaded] = useState(false)
     const [message, setMessage] = useState('')
-    const app = useTezosContext();
+    const app = useTezosContext()
+    const scrollRef = useRef()
 
     const handleDrop = (file) => {
-      if (!file[0]?.type) return
-     
-      setPreview(URL.createObjectURL(file[0]))
-      let reader = new window.FileReader();
-     reader.readAsArrayBuffer(file[0]);
-     reader.onloadend = async()=>{
-        console.log(reader.result)
+        if (!file[0]?.type) return
+        setPreview(URL.createObjectURL(file[0]))
+        let reader = new window.FileReader();
+        reader.readAsArrayBuffer(file[0]);
+        reader.onloadend = async()=>{
         file[0].buffer=reader.result
-        console.log(file[0])
      }
-     setFile(file[0])
-      setLoaded(true)
+        setFile(file[0])
+        setLoaded(true)
     }
+
+    useEffect(() => {
+        scrollRef.current && loaded && 
+        setTimeout(() => {
+            scrollRef.current.scrollIntoView(({behavior: 'smooth'}));
+            console.log( scrollRef.current)
+        }, 800)
+        
+        
+      }, [loaded, scrollRef]);
 
     const initialValues = {
         title: mintPayload?.title || '',
@@ -107,13 +115,17 @@ export const Mint = () => {
         values.address=app.address
         setMintPayload(values);
         setIsPreview(true)
-        setIsForm(false);
-        console.log(values)
+        // const element = document.getElementById("formik");
+       
+       
+        // setIsForm(false);
+        // console.log(values)
     };
    
     
     if(!app.address) return(<p>please sync to mint</p>, <p/>)
-console.log(isPreview)
+
+
     return (
         <div >
             <Dropzone multiple={false}  
@@ -151,12 +163,15 @@ console.log(isPreview)
                             <label
                                 className='label'
                                 htmlFor={'title'}
+                                ref={scrollRef}
+                                id='formik'
                             >Title</label>
                             <Field
                                 className='fields'
                                 id="title"
                                 name="title"
                                 type="text"
+                                autoFocus={true}
                             />
                             <ErrorMessage
                                 component="span"
@@ -164,7 +179,7 @@ console.log(isPreview)
                                 name="title"
                             />
                         </div>
-                        <div className='formField'>
+                        <div className='formField' >
                             <label
                                 className='label'
                                 htmlFor={'description'}
@@ -222,7 +237,7 @@ console.log(isPreview)
                                 name="harberger"
                             />
                         </div>
-                        <div className='formField'>
+                        <div className='formField' >
                             <label
                                 className='label'
                                 htmlFor={'price'}
@@ -261,6 +276,10 @@ console.log(isPreview)
                 <div style= {{borderBottom: '6px dotted', width: '63%', marginBottom: '27px'}} />
                <p>{mintPayload.description}</p>
                <div style= {{borderBottom: '6px dotted', width: '63%', marginTop:'27px'}} />               
+               <p>[ {mintPayload.tags} ]</p>
+               <div style= {{borderBottom: '6px dotted', width: '63%'}} />               
+         
+            <p/>
            <p>Created by: {`${app.alias || app.address.substr(0, 4) + ". . ." + app.address.substr(-4)}`}</p>
             <p>Harberger  Fee: {mintPayload.harberger}%</p>
             <p>Initial Price: {mintPayload.price} ꜩ</p>
@@ -272,7 +291,7 @@ console.log(isPreview)
         <button onClick={()=> handleMint()}>[ ::  Mint  :: ]<p/></button> <button style={{fontSize: '27px'}} onClick={() => setIsPreview(false)}>{`<`}<p/></button>
             {message}
         </div>}
-        </div>
+        </div >
     );
 };
 

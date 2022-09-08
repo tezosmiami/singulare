@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useTezosContext } from "./context/tezos-context";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, Link, useLocation } from "react-router-dom";
 import { Home } from './pages/Home'
 import { Gallery } from './pages/Gallery'
 import { Objkt } from './pages/Objkt'
@@ -14,7 +14,7 @@ function App() {
   const  app = useTezosContext();
   const axios = require('axios');
   const [banned, setBanned] = useState();
-  
+  const location = useLocation();
 
   useEffect(() => {
     var r = document.querySelector(':root')
@@ -28,9 +28,14 @@ function App() {
   }
     getBanned();
   }, [])
+
+
   return(
     <>
     <header>
+      <div style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+    {app.address && location.pathname !== '/Mint' && <Link to='/Mint'> mint</Link>}
+    <div style={{justifyContent: 'flex-end', flexDirection: 'row'}}>
     {app.address && <Link to={`/${app.name || app.address}`}>
       {/* {app.address && <a href={`https://hicetnunc.miami/tz/${app.address}`}
       target="blank" rel="noopener noreferrer"> 
@@ -38,12 +43,14 @@ function App() {
         {app.name.length > 0 && app.name + ' / '|| app.address.substr(0, 4) + "..." + app.address.substr(-4)+' / '}
       {/* </a>} */}
       </Link>}
+      
     
   
       <button onClick={() => !app.activeAccount ? app.sync() : app.unsync()}> 
         {!app.activeAccount ? "sync" : "unsync"}
       </button>
-
+      </div>
+      </div>
     </header>     
     <Link className='purple' to="/">S1NGULARE</Link>
      <p>1/1 TEZOS OBJKTS</p>
