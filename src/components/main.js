@@ -61,8 +61,7 @@ console.log(process.env.REACT_APP_HARBERGER)
   useEffect(() => {
     const getHarberger = async () => {
     let result = await axios.get(`https://api.jakartanet.tzkt.io/v1/tokens?contract=${process.env.REACT_APP_HARBERGER}`)
-    setHarberger(result)
-    console.log(result)
+    setHarberger(result.data)
   }
     getHarberger()
   }, [axios])
@@ -91,20 +90,16 @@ console.log(process.env.REACT_APP_HARBERGER)
         breakpointCols={breakpointColumns}
         className='grid'
          columnClassName='column'>
-        {harberger && harberger.recent.map(p=> (
-           <Link className='center' key={p.artifact_uri+p.token_id} to={`/${p.fa2_address}/${p.token_id}`}>
-           {p.mime_type.includes('image') && p.mime_type !== 'image/svg+xml' ?
-           <img alt='' className= 'pop' key={p.artifact_uri+p.token_id}  src={`https://ipfs.io/ipfs/${p.display_uri ? p.display_uri?.slice(7) : p.artifact_uri.slice(7)}`}/> 
-           : p.mime_type.includes('video') ? 
+        {harberger && harberger.map((p,i)=> (
+
+           <Link className='center' key={i} to={`/${process.env.REACT_APP_HARBERGER}/${i}`}>
+           {p.metadata.formats[0].mimeType.includes('image') && p.metadata.formats[0].mimeType !== 'image/svg+xml' ?
+           <img alt='' className= 'pop' key={i}  src={`https://ipfs.io/ipfs/${p.metadata.displayUri ? p.metadata.displayUri?.slice(7) : p.metadata.artifactUri.slice(7)}`}/> 
+           : p.metadata.formats[0].mimeType.includes('video') ? 
             <div className='pop video '>
-              <ReactPlayer url={'https://ipfs.io/ipfs/' + p.artifact_uri.slice(7)} width='100%' height='100%' muted={true} playing={true} loop={true}/>
+              <ReactPlayer url={'https://ipfs.io/ipfs/' + p.metadata.artifactUri.slice(7)} width='100%' height='100%' muted={true} playing={true} loop={true}/>
              </div>
-           : p.mime_type.includes('audio') ?  
-            <div className= 'pop'>
-             <img className= 'pop' alt='' src={'https://ipfs.io/ipfs/' + p.display_uri.slice(7)} />
-             <audio style={{width:'93%'}} src={'https://ipfs.io/ipfs/' + p.artifact_uri.slice(7)} controls />
-            </div>
-           : p.mime_type.includes('text') ? <div className='text'>{p.description}</div> : ''}
+            : ''}
             </Link>   
             ))} 
         </Masonry>
