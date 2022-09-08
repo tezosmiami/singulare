@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { request, gql } from 'graphql-request'
 import useSWR, { useSWRConfig } from 'swr';
 import {  Link } from "react-router-dom";
 import ReactPlayer from 'react-player'
 import Masonry from 'react-masonry-css'
+import App from '../App';
 
 
 const breakpointColumns = {
@@ -47,14 +48,27 @@ export const getObjkts = gql`
   }  
    ` 
 const fetcher = (key, query, offset, offsetNew) => request(process.env.REACT_APP_TEZTOK_API, query, {offset, offsetNew})
+const axios = require('axios')
 
 export const Main = ({banned}) => {
   const { mutate } = useSWRConfig()
+  const [harberger, setHarberger] = useState()
   const [pageIndex, setPageIndex] = useState(0);
   const [offset, setOffset] = useState(Math.floor(Math.floor(Math.random() * 195000)))
   const [offsetNew, setOffsetNew] = useState(0)
 
+console.log(process.env.REACT_APP_HARBERGER)
+  useEffect(() => {
+    const getHarberger = async () => {
+    let result = await axios.get(`https://api.jakartanet.tzkt.io/v1/tokens?contract=${process.env.REACT_APP_HARBERGER}`)
+    setHarberger(result)
+    console.log(result)
+  }
+    getHarberger()
+  }, [axios])
 
+
+  
   // useEffect(() => {
   //   const getTotal = async () => {
   //     const result = await request(process.env.REACT_APP_TEZTOK_API, getCount)
@@ -72,6 +86,33 @@ export const Main = ({banned}) => {
 
     return (
       <>
+            <p style={{marginTop:0}}>harberger objkts:</p>
+      <Masonry
+        breakpointCols={breakpointColumns}
+        className='grid'
+         columnClassName='column'>
+        {harberger && harberger.recent.map(p=> (
+           <Link className='center' key={p.artifact_uri+p.token_id} to={`/${p.fa2_address}/${p.token_id}`}>
+           {p.mime_type.includes('image') && p.mime_type !== 'image/svg+xml' ?
+           <img alt='' className= 'pop' key={p.artifact_uri+p.token_id}  src={`https://ipfs.io/ipfs/${p.display_uri ? p.display_uri?.slice(7) : p.artifact_uri.slice(7)}`}/> 
+           : p.mime_type.includes('video') ? 
+            <div className='pop video '>
+              <ReactPlayer url={'https://ipfs.io/ipfs/' + p.artifact_uri.slice(7)} width='100%' height='100%' muted={true} playing={true} loop={true}/>
+             </div>
+           : p.mime_type.includes('audio') ?  
+            <div className= 'pop'>
+             <img className= 'pop' alt='' src={'https://ipfs.io/ipfs/' + p.display_uri.slice(7)} />
+             <audio style={{width:'93%'}} src={'https://ipfs.io/ipfs/' + p.artifact_uri.slice(7)} controls />
+            </div>
+           : p.mime_type.includes('text') ? <div className='text'>{p.description}</div> : ''}
+            </Link>   
+            ))} 
+        </Masonry>
+        <div>
+        <div style= {{borderBottom: '6px dotted', width: '80%', marginTop:'33px'}} />
+        <div style= {{borderBottom: '6px dotted', width: '80%'}} />
+        </div>
+          <p/>
       <p style={{marginTop:0}}>recent objkts:</p>
       <Masonry
         breakpointCols={breakpointColumns}
