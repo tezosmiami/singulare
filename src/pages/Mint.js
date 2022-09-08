@@ -123,8 +123,7 @@ export const Mint = () => {
     };
    
     
-    if(!app.address) return(<p>please sync to mint</p>, <p/>)
-
+    if(!app.address) return(<p>please sync to mint</p>)
 
     return (
         <div >
