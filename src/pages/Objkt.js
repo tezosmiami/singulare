@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useTezosContext } from "../context/tezos-context";
 import { request, gql } from 'graphql-request'
-import useSWR, { useSWRConfig } from 'swr';
 import ReactPlayer from 'react-player'
 import { useParams, Link } from 'react-router-dom';
 
@@ -58,7 +57,7 @@ export const Objkt = ({banned}) => {
           }
           }
           getObjkt();
-      }, [params,banned])
+      }, [params, banned, queryObjkt])
 
     if (objkt.length === 0) return <div>loading. . .<p/></div>
     if (objkt[0] === 'nada') return <div>nada. . .<p/></div>
@@ -110,7 +109,7 @@ return(
     // </a> 
     : objkt?.mime_type?.includes('audio') ?  
     <div className='view'>
-       <img className='view' style={{width:'90%', margin: '12px'}} src={'https://ipfs.io/ipfs/' + objkt.display_uri.slice(7)} />
+       <img className='view' alt='' style={{width:'90%', margin: '12px'}} src={'https://ipfs.io/ipfs/' + objkt.display_uri.slice(7)} />
       <audio  style={{ margin: '6px'}}src={'https://ipfs.io/ipfs/' + objkt.artifact_uri.slice(7)} controls />
     </div>
     :  objkt.mime_type.includes('text') ? <a className='view' href = {`https://ipfs.io/ipfs/${objkt.artifact_uri.slice(7)}`} target='blank'  rel='noopener noreferrer'><div className='textObjkt'>{objkt.description}</div></a> : null}

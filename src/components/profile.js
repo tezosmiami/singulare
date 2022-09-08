@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { request, gql } from 'graphql-request'
-import useSWR, { useSWRConfig } from 'swr';
+import useSWR from 'swr';
 import ReactPlayer from 'react-player'
 import { useParams, Link } from 'react-router-dom';
 import Masonry from 'react-masonry-css'
@@ -69,10 +69,10 @@ const hicFetcher = (key, query, param) => request(process.env.REACT_APP_HICDEX_A
 export const Profile = ({banned}) => {
 
 //   const [pageIndex, setPageIndex] = useState(0);
-  const [offset, setOffset] = useState(0)
+  // const [offset, setOffset] = useState(0)
   const { account } = useParams();
-  const { data: alias, error: aliasError } = useSWR(account.length !== 36 ? ['/api/name', getAddressbyName, account] : null, fetcher)
-  const { data: subjkt, error: subjktError } = useSWR(account.length !== 36 ? ['/api/subjkt', getAddressbySubjkt, account.toLowerCase().replace(/\s+/g, '')] : null, hicFetcher)
+  const { data: alias } = useSWR(account.length !== 36 ? ['/api/name', getAddressbyName, account] : null, fetcher)
+  const { data: subjkt } = useSWR(account.length !== 36 ? ['/api/subjkt', getAddressbySubjkt, account.toLowerCase().replace(/\s+/g, '')] : null, hicFetcher)
   const address = account?.length === 36 ? account : alias?.tzprofiles[0]?.account || subjkt?.hic_et_nunc_holder[0]?.address || null
   const { data, error } = useSWR(address?.length === 36 ? ['/api/profile', getObjkts, address] : null, fetcher, { refreshInterval: 15000 })
 
@@ -100,7 +100,7 @@ export const Profile = ({banned}) => {
       <div className='container'>
       <Masonry
         breakpointCols={breakpointColumns}
-        className={filteredcreated.length == 1 ? '' : 'grid'}
+        className={filteredcreated.length === 1 ? '' : 'grid'}
          columnClassName='column'>
         {filteredcreated && filteredcreated.map(p=> (
            <Link className='center' key={p.artifact_uri+p.token_id} to={`/${p.fa2_address}/${p.token_id}`}>
@@ -112,7 +112,7 @@ export const Profile = ({banned}) => {
              </div>
             : p.mime_type.includes('audio') ?  
               <div className= 'pop'>
-                <img className= 'pop' src={'https://ipfs.io/ipfs/' + p.display_uri.slice(7)} />
+                <img className= 'pop' alt='' src={'https://ipfs.io/ipfs/' + p.display_uri.slice(7)} />
                 <audio style={{width:'93%'}} src={'https://ipfs.io/ipfs/' + p.artifact_uri.slice(7)} controls />
               </div>
            : p.mime_type.includes('text') ? <div className='text'>{p.description}</div> : ''}
@@ -129,7 +129,7 @@ export const Profile = ({banned}) => {
        <div className='container'>
        <Masonry
         breakpointCols={breakpointColumns}
-        className={filteredcurated.length == 1 ? '' : 'grid'}
+        className={filteredcurated.length === 1 ? '' : 'grid'}
          columnClassName='column'>
         {filteredcurated && filteredcurated.map(p=> (
         <Link  key={p.artifact_uri+p.token_id} to={`/${p.fa2_address}/${p.token_id}`}>
@@ -141,7 +141,7 @@ export const Profile = ({banned}) => {
           </div>
           : p.mime_type.includes('audio') ?  
           <div className= 'pop'>
-            <img className= 'pop' src={'https://ipfs.io/ipfs/' + p.display_uri.slice(7)} />
+            <img className= 'pop' alt='' src={'https://ipfs.io/ipfs/' + p.display_uri.slice(7)} />
             <audio style={{width:'93%'}} src={'https://ipfs.io/ipfs/' + p.artifact_uri.slice(7)} controls />
           </div>
         : p.mime_type.includes('text') ? <div className='text'>{p.description}</div> : ''}

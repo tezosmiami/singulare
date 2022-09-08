@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { request, gql } from 'graphql-request'
 import useSWR, { useSWRConfig } from 'swr';
 import {  Link } from "react-router-dom";
@@ -87,7 +87,7 @@ export const Main = ({banned}) => {
              </div>
            : p.mime_type.includes('audio') ?  
             <div className= 'pop'>
-             <img className= 'pop' src={'https://ipfs.io/ipfs/' + p.display_uri.slice(7)} />
+             <img className= 'pop' alt='' src={'https://ipfs.io/ipfs/' + p.display_uri.slice(7)} />
              <audio style={{width:'93%'}} src={'https://ipfs.io/ipfs/' + p.artifact_uri.slice(7)} controls />
             </div>
            : p.mime_type.includes('text') ? <div className='text'>{p.description}</div> : ''}
@@ -114,7 +114,7 @@ export const Main = ({banned}) => {
              </div>
           : p.mime_type.includes('audio') ?  
            <div className= 'pop'>
-            <img className= 'pop' src={'https://ipfs.io/ipfs/' + p.display_uri.slice(7)} />
+            <img className= 'pop' alt='' src={'https://ipfs.io/ipfs/' + p.display_uri.slice(7)} />
             <audio style={{width:'93%'}} src={'https://ipfs.io/ipfs/' + p.artifact_uri.slice(7)} controls />
            </div>
            : p.mime_type.includes('text') ? <div className='text'>{p.description}</div> : ''}

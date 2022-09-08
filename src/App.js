@@ -27,8 +27,8 @@ function App() {
     setBanned(result.data)
   }
     getBanned();
-  }, [])
 
+  }, [axios])
 
   return(
     <>
@@ -40,11 +40,10 @@ function App() {
       {/* {app.address && <a href={`https://hicetnunc.miami/tz/${app.address}`}
       target="blank" rel="noopener noreferrer"> 
        */}
-        {app.name.length > 0 && app.name + ' / '|| app.address.substr(0, 4) + "..." + app.address.substr(-4)+' / '}
+        {(app.name.length > 0 && app.name + ' / ') || (app.address.substr(0, 4) + "..." + app.address.substr(-4)+' / ')}
       {/* </a>} */}
       </Link>}
       
-    
   
       <button onClick={() => !app.activeAccount ? app.sync() : app.unsync()}> 
         {!app.activeAccount ? "sync" : "unsync"}
@@ -52,11 +51,12 @@ function App() {
       </div>
       </div>
     </header>     
+
     <Link className='purple' to="/">S1NGULARE</Link>
      <p>1/1 TEZOS OBJKTS</p>
     <LightButton />
 
-     <div>
+     <div  style={{minHeight: '50vh'}}>
      <Routes>
         <Route path="/" element={<Home banned={banned} />} />
         <Route path='/:account' element={<Gallery banned={banned}/>} />
@@ -66,10 +66,12 @@ function App() {
        </Route>
       </Routes>
     </div>
+    <div>
     <LightButton />
        <a href={`https://www.teztok.com`} target="blank"
          rel="noopener noreferrer"> indexed by teztok</a>
        <p>experimental dApp - enjoy at your own risk. . .</p>
+    </div>
     </>
     )
 }
