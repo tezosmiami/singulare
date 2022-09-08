@@ -43,12 +43,13 @@ function App() {
         {!app.activeAccount ? "sync" : "unsync"}
       </button>
 
-    </header>     
+    </header>   
+
     <Link className='purple' to="/">S1NGULARE</Link>
      <p>1/1 TEZOS OBJKTS</p>
     <LightButton />
 
-     <div>
+     <div  style={{minHeight: '50vh'}}>
      <Routes>
         <Route path="/" element={<Home banned={banned} />} />
         <Route path='/:account' element={<Gallery banned={banned}/>} />
@@ -57,10 +58,12 @@ function App() {
        </Route>
       </Routes>
     </div>
+    <div>
     <LightButton />
        <a href={`https://www.teztok.com`} target="blank"
          rel="noopener noreferrer"> indexed by teztok</a>
        <p>experimental dApp - enjoy at your own risk. . .</p>
+    </div>
     </>
     )
 }
