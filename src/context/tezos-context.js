@@ -138,14 +138,15 @@ export const TezosContextProvider = ({ children }) => {
     return true;
 };
 
-  async function collect({swap_id, price, contract, platform}) {
-    console.log(swap_id, platform)
+  async function collect({swap_id, price, contract, platform, token_id}) {
+    console.log(token_id, contract)
     try {
       const interact = await tezos.wallet.at(contract)
         const op = platform === 'VERSUM' ? await interact.methods['collect_swap'](1,swap_id)
                   : platform === 'HEN' || 'TYPED' ? await interact.methods['collect'](swap_id)
-                  : platform === '8BIDOU'? await interact.methods['buy'](swap_id, 1, price) 
-                  : platform === 'OBJKT'? await interact.methods['fulfill_ask'](swap_id)
+                  : platform === '8BIDOU' ? await interact.methods['buy'](swap_id, 1, price) 
+                  : platform === 'OBJKT' ? await interact.methods['fulfill_ask'](swap_id)
+                  : platform ==='HARBERGER' ? await interact.methods['collect'](token_id, price)
                   : ''
 
         if(op) {await op.send({
@@ -163,8 +164,29 @@ export const TezosContextProvider = ({ children }) => {
     return true;
 };
 
+async function deposit(deposit) {
+  try {
+    const interact = await tezos.wallet.at(process.env.REACT_APP_HARBERGER_FEES)
+      const op =  await interact.methods['transfer_to_deposit']()
 
-  const wrapped = { ...app, tezos, collect, mint, sync, unsync, activeAccount, address, name};
+      if(op) {await op.send({
+        amount: deposit,
+        mutez: true,
+        storageLimit: 310
+    }) 
+    // await op.confirmation(2)}
+  }
+
+  } catch(e) {
+      console.log('Error:', e);
+      return false;
+  }
+  return true;
+};
+
+
+
+  const wrapped = { ...app, tezos, collect, mint, deposit, sync, unsync, activeAccount, address, name};
 
   return (
    

@@ -10,13 +10,13 @@ export const Harberger = ({ banned }) => {
   const [message, setMessage] = useState();
   const app = useTezosContext();
   const params = useParams();
-  console.log('hi');
+  
   useEffect(() => {
     const getHarberger = async () => {
-      let result = await axios.get(
-        `https://api.jakartanet.tzkt.io/v1/tokens?contract=${process.env.REACT_APP_HARBERGER}&tokenId=${params.id}`
-      );
-      setHarberger(result.data[0]);
+      let fees = await axios.get(`https://api.jakartanet.tzkt.io/v1/bigmaps/123703/keys/${params.id}`)
+      let data = await axios.get(`https://api.jakartanet.tzkt.io/v1/tokens/balances?token.contract=${process.env.REACT_APP_HARBERGER}&token.tokenId=${params.id}`)
+      console.log(data)
+      setHarberger({...data.data[0].token.metadata, ...data.data[0].account, ...fees.data.value});
     };
     getHarberger();
   }, [axios]);
@@ -34,41 +34,44 @@ export const Harberger = ({ banned }) => {
       </div>
     );
 
-  // const handleCollect = () => async() => {
-  //   !app.address && setMessage('please sync. . .')
-  //   if(app.address) try {
-  //       setMessage('ready wallet. . .');
-  //       const isCollected = await app.collect({swap_id: harberger.listings[0].swap_id || harberger.listings[0].ask_id, price: harberger.price,
-  //          contract: harberger.listings[0].contract_address, platform: harberger.listings[0].type.includes('harberger') ? 'harberger' : harberger.platform});
-  //       setMessage(isCollected ? 'congratulations - you got it!' : 'transaction denied. . .');
+  const handleCollect = () => async() => {
+    !app.address && setMessage('please sync. . .')
+    if(app.address) try {
+        setMessage('ready wallet. . .');
+        const isCollected = await app.collect({
+            contract: process.env.REACT_APP_HARBERGER_FEES, 
+            price: harberger.price,
+            token_id: parseFloat(params.id),
+            platform:'HARBERGER'})
+        setMessage(isCollected ? 'congratulations - you got it!' : 'transaction denied. . .');
 
-  //   } catch(e) {
-  //       setMessage('errors. . .');
-  //       console.log('Error: ', e);
-  //   }
-  //   setTimeout(() => {
-  //       setMessage(null);
-  //   }, 3200);
-  // };
-  console.log(harberger);
+    } catch(e) {
+        setMessage('errors. . .');
+        console.log('Error: ', e);
+    }
+    setTimeout(() => {
+        setMessage(null);
+    }, 3200);
+  };
+  
   return (
     <>
-      {harberger.metadata.formats[0].mimeType.includes('image') &&
-      harberger.metadata.formats[0].mimeType !== 'image/svg+xml' ? (
+      {harberger.formats[0].mimeType.includes('image') &&
+      harberger.formats[0].mimeType !== 'image/svg+xml' ? (
         <img
           alt=''
           className='view'
           src={`https://ipfs.io/ipfs/${
-            harberger.metadata.displayUri
-              ? harberger.metadata.displayUri?.slice(7)
-              : harberger.metadata.artifactUri.slice(7)
+            harberger.displayUri
+              ? harberger.displayUri?.slice(7)
+              : harberger.artifactUri.slice(7)
           }`}
         />
-      ) : harberger.metadata.formats[0].mimeType.includes('video') ? (
+      ) : harberger.formats[0].mimeType.includes('video') ? (
         <div className='view video '>
           <ReactPlayer
             url={
-              'https://ipfs.io/ipfs/' + harberger.metadata.artifactUri.slice(7)
+              'https://ipfs.io/ipfs/' + harberger.artifactUri.slice(7)
             }
             width='100%'
             height='100%'
@@ -80,54 +83,36 @@ export const Harberger = ({ banned }) => {
       ) : (
         ''
       )}
-      <div
-        style={{ borderBottom: '6px dotted', width: '63%', margin: '33px' }}
-      />
 
-      {harberger.metadata.name}
-      <div
-        style={{ borderBottom: '6px dotted', width: '63%', margin: '33px' }}
-      />
-
-      {harberger.metadata.description}
-      <div
-        style={{ borderBottom: '6px dotted', width: '63%', margin: '33px' }}
-      />
-      <div>{harberger.metadata.tags.map((p) => `#${p} `)}</div>
-      <div
-        style={{ borderBottom: '6px dotted', width: '63%', margin: '33px' }}
-      />
-      <Link
-        to={`/${harberger.minter_profile?.alias || harberger.artist_address}`}
-      >
+      <div style={{ borderBottom: '6px dotted', width: '63%', margin: '33px' }} />
+        {harberger.name}
+      <div style={{ borderBottom: '6px dotted', width: '63%', margin: '33px' }} />
+        {harberger.description}
+      <div style={{ borderBottom: '6px dotted', width: '63%', margin: '33px' }} />
+      <Link to={`/${harberger.creators[0]}`}>
         created by:{' '}
-        {harberger.metadata.creators[0].substr(0, 4) +
-          '...' +
-          harberger.metadata.creators[0].substr(-4)}
-        <p />
+        {harberger.creators[0].substr(0, 4) + '...' + harberger.creators[0].substr(-4)}
       </Link>
       <p>[-]</p>
       <div>
-        {harberger.price > 0 ? (
-          <div style={{ cursor: 'pointer' }}>
+          <div style={{ cursor: 'pointer' }} onClick={handleCollect()}>
             {`collect for ${harberger.price / 1000000}ꜩ`}
-            <a className='center'>-</a>
           </div>
-        ) : (
-          ''
-        )}
       </div>
-      {message}
-      <div
-        style={{ borderBottom: '6px dotted', width: '63%', marginTop: '27px' }}
-      />
-      <div
-        style={{
-          borderBottom: '6px dotted',
-          width: '63%',
-          marginBottom: '33px',
-        }}
-      />
+      <div>+</div>
+      <div>  monthly fee: {harberger.fee/10}%</div>
+      <div style={{ cursor: 'pointer' }} onClick={()=>app.deposit(harberger.price * harberger.fee/1000)}>[deposit]</div>
+       <p>[-]</p> 
+        <div>HARBERGER</div>
+    
+        {(harberger.creators[0] !== harberger.address) && <p>curated by: {harberger.address.substr(0, 4) + '...' +  harberger.address.substr(-4)}</p>}
+       
+        <div style={{ borderBottom: '6px dotted', width: '63%', margin: '33px' }} />
+       
+       <div>{harberger.tags.map((p) => `#${p} `)}</div>
+        
+      <div style={{ borderBottom: '6px dotted', width: '63%', marginTop: '27px' }} />
+      <div style={{ borderBottom: '6px dotted', width: '63%', marginBottom: '33px'}} />
     </>
   );
 };

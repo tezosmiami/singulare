@@ -78,7 +78,7 @@ export const Objkt = ({banned}) => {
           setMessage(null);
       }, 3200);
     };
-    console.log(objkt)
+
 return(
   <>
   
