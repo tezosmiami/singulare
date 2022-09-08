@@ -3,6 +3,7 @@ import { useTezosContext } from "./context/tezos-context";
 import { Routes, Route, Link, useLocation } from "react-router-dom";
 import { Home } from './pages/Home'
 import { Gallery } from './pages/Gallery'
+import { Harberger } from './pages/Harberger'
 import { Objkt } from './pages/Objkt'
 import { Mint } from './pages/Mint'
 import { LightButton } from './components/light-button';
@@ -61,6 +62,9 @@ function App() {
         <Route path="/" element={<Home banned={banned} />} />
         <Route path='/:account' element={<Gallery banned={banned}/>} />
         <Route path='/Mint' element={<Mint/>} />
+        <Route path={`/${process.env.REACT_APP_HARBERGER}`} >
+          <Route path=":id" element={<Harberger banned={banned}/>} />
+       </Route>
         <Route path=":contract" >
           <Route path=":id" element={<Objkt banned={banned}/>} />
        </Route>
