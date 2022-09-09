@@ -57,7 +57,7 @@ export const Main = ({banned}) => {
   const [offset, setOffset] = useState(Math.floor(Math.floor(Math.random() * 195000)))
   const [offsetNew, setOffsetNew] = useState(0)
 
-console.log(process.env.REACT_APP_HARBERGER)
+
   useEffect(() => {
     const getHarberger = async () => {
     let result = await axios.get(`https://api.jakartanet.tzkt.io/v1/tokens?contract=${process.env.REACT_APP_HARBERGER}`)
@@ -82,7 +82,7 @@ console.log(process.env.REACT_APP_HARBERGER)
   if (!data) return <div>loading. . .<p/></div>
 
   const final = data?.random.filter((i) => !banned.includes(i.artist_address))
-
+console.log(harberger)
     return (
       <>
             <p style={{marginTop:0}}>harberger objkts:</p>
@@ -91,7 +91,7 @@ console.log(process.env.REACT_APP_HARBERGER)
         className='grid'
          columnClassName='column'>
         {harberger && harberger.map((p,i)=> (
-
+          p.metadata && 
            <Link className='center' key={i} to={`/${process.env.REACT_APP_HARBERGER}/${i}`}>
            {p.metadata.formats[0].mimeType.includes('image') && p.metadata.formats[0].mimeType !== 'image/svg+xml' ?
            <img alt='' className= 'pop' key={i}  src={`https://ipfs.io/ipfs/${p.metadata.displayUri ? p.metadata.displayUri?.slice(7) : p.metadata.artifactUri.slice(7)}`}/> 
@@ -100,7 +100,7 @@ console.log(process.env.REACT_APP_HARBERGER)
               <ReactPlayer url={'https://ipfs.io/ipfs/' + p.metadata.artifactUri.slice(7)} width='100%' height='100%' muted={true} playing={true} loop={true}/>
              </div>
             : ''}
-            </Link>   
+            </Link> 
             ))} 
         </Masonry>
         <div>

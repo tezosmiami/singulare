@@ -137,6 +137,7 @@ export const TezosContextProvider = ({ children }) => {
     }
     return true;
 };
+
   const costCollect = async ({price, token_id, deposit}) => {
    console.log(price,deposit)
     const contract = await tezos.wallet.at(process.env.REACT_APP_HARBERGER_FEES)

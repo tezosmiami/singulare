@@ -4,7 +4,6 @@ import { useTezosContext } from '../context/tezos-context'
 import { setMetadata }  from '../utils/ipfs'
 import Dropzone from 'react-dropzone'
 import * as yup from 'yup'
-import App from '../App';
 
 const min_fee = 1;
 const min_price = 0;
