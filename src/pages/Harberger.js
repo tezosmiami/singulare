@@ -15,7 +15,6 @@ export const Harberger = ({ banned }) => {
     const getHarberger = async () => {
       let fees = await axios.get(`https://api.jakartanet.tzkt.io/v1/bigmaps/123703/keys/${params.id}`)
       let data = await axios.get(`https://api.jakartanet.tzkt.io/v1/tokens/balances?token.contract=${process.env.REACT_APP_HARBERGER}&token.tokenId=${params.id}`)
-      console.log(data)
       setHarberger({...data.data[0].token.metadata, ...data.data[0].account, ...fees.data.value});
     };
     getHarberger();
@@ -38,10 +37,11 @@ export const Harberger = ({ banned }) => {
     !app.address && setMessage('please sync. . .')
     if(app.address) try {
         setMessage('ready wallet. . .');
-        const isCollected = await app.collect({
+        const isCollected = await app.costCollect({
             contract: process.env.REACT_APP_HARBERGER_FEES, 
             price: harberger.price,
             token_id: parseFloat(params.id),
+            deposit: parseFloat(harberger.price * harberger.fee/1000),
             platform:'HARBERGER'})
         setMessage(isCollected ? 'congratulations - you got it!' : 'transaction denied. . .');
 
@@ -97,11 +97,11 @@ export const Harberger = ({ banned }) => {
       <div>
           <div style={{ cursor: 'pointer' }} onClick={handleCollect()}>
             {`collect for ${harberger.price / 1000000}ꜩ`}
-          </div>
-      </div>
       <div>+</div>
-      <div>  monthly fee: {harberger.fee/10}%</div>
-      <div style={{ cursor: 'pointer' }} onClick={()=>app.deposit(harberger.price * harberger.fee/1000)}>[deposit]</div>
+      <div>  first monthly fee: {harberger.fee/10}%</div>
+      </div>
+      </div>
+      {/* <div style={{ cursor: 'pointer' }} onClick={()=>app.deposit(harberger.price * harberger.fee/1000)}>[deposit]</div> */}
        <p>[-]</p> 
         <div>HARBERGER</div>
     

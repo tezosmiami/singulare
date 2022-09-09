@@ -1,5 +1,5 @@
 import { useEffect, useState, createContext, useContext} from "react";
-import { TezosToolkit, MichelsonMap } from "@taquito/taquito";
+import { TezosToolkit, MichelsonMap, OpKind } from "@taquito/taquito";
 import { BeaconWallet } from "@taquito/beacon-wallet";
 
 
@@ -137,17 +137,34 @@ export const TezosContextProvider = ({ children }) => {
     }
     return true;
 };
-
+  const costCollect = async ({price, token_id, deposit}) => {
+   console.log(price,deposit)
+    const contract = await tezos.wallet.at(process.env.REACT_APP_HARBERGER_FEES)
+    const batch = await tezos.wallet.batch([
+      { kind: OpKind.TRANSACTION, 
+        ...contract.methods.transfer_to_deposit(deposit).toTransferParams({ amount: deposit, mutez: true, storageLimit: 210 }) 
+      },
+      { kind: OpKind.TRANSACTION, 
+        ...contract.methods.collect(token_id,price).toTransferParams({ amount: price, mutez: true, storageLimit: 210 }) 
+      }
+    ]
+    )
+    
+     const batchOp = await batch.send();
+     console.log('Operation hash:', batchOp.hash);
+    await batchOp.confirmation();
+    return true;
+  }
   async function collect({swap_id, price, contract, platform, token_id}) {
-    console.log(token_id, contract,)
     try {
       const interact = await tezos.wallet.at(contract)
-        const op = platform ==='HARBERGER' ? await interact.methods['collect'](token_id, price)
+        const op = platform ==='HARBERGER' ?  await interact.methods['collect'](token_id, price)
                   : platform === 'VERSUM' ? await interact.methods['collect_swap'](1,swap_id)
                   : platform === 'HEN' || 'TYPED' ? await interact.methods['collect'](swap_id)
                   : platform === '8BIDOU' ? await interact.methods['buy'](swap_id, 1, price) 
                   : platform === 'OBJKT' ? await interact.methods['fulfill_ask'](swap_id)
-                  :  ''
+                  : 
+ ''
 
         if(op) {await op.send({
           amount: price,
@@ -186,7 +203,7 @@ async function deposit(deposit) {
 
 
 
-  const wrapped = { ...app, tezos, collect, mint, deposit, sync, unsync, activeAccount, address, name};
+  const wrapped = { ...app, tezos, collect, costCollect, mint, deposit, sync, unsync, activeAccount, address, name};
 
   return (
    
