@@ -1,6 +1,21 @@
+const axios = require('axios')
 
+export const getMetadata = async(id) => {
+    const hex2a = (hex) => {
+        var str = '';
+        for (var i = 0; i < hex.length; i += 2)
+            str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
+        return str;
+      }        
+    let result = await axios.get(`https://api.jakartanet.tzkt.io/v1/contracts/${process.env.REACT_APP_HARBERGER}/bigmaps/token_metadata/keys/${id}`)
+    let bytes=result.data.value.token_info['']
+        bytes=hex2a(bytes)
+        let data =  await axios.get(bytes.replace('ipfs://', 'https://ipfs.io/ipfs/'))
+        let metadata = await data.data
+        return metadata
+}
 
-export const setMetadata = async({values, file, setMessage}) => {
+export const setMetadata = async({values, file}) => {
     const { create } = await import('ipfs-http-client')
     const auth =
     'Basic ' + Buffer.from(process.env.REACT_APP_INFURA_ID + ':' + process.env.REACT_APP_INFURA_KEY).toString('base64');
@@ -27,7 +42,6 @@ export const setMetadata = async({values, file, setMessage}) => {
     // let reader = new window.FileReader();
     // reader.readAsArrayBuffer(file);
     // reader.onloadend = async () =>{ 
-    setMessage('Uploading to IPFS…');
 
     const artifactUri = await addToIpfs(file.buffer);
     const displayUri = await addToIpfs(file.buffer);

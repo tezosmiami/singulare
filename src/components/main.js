@@ -4,7 +4,7 @@ import useSWR, { useSWRConfig } from 'swr';
 import {  Link } from "react-router-dom";
 import ReactPlayer from 'react-player'
 import Masonry from 'react-masonry-css'
-import App from '../App';
+import { getMetadata } from '../utils/metadata'
 
 
 const breakpointColumns = {
@@ -50,6 +50,7 @@ export const getObjkts = gql`
 const fetcher = (key, query, offset, offsetNew) => request(process.env.REACT_APP_TEZTOK_API, query, {offset, offsetNew})
 const axios = require('axios')
 
+
 export const Main = ({banned}) => {
   const { mutate } = useSWRConfig()
   const [harberger, setHarberger] = useState()
@@ -61,6 +62,10 @@ export const Main = ({banned}) => {
   useEffect(() => {
     const getHarberger = async () => {
     let result = await axios.get(`https://api.jakartanet.tzkt.io/v1/tokens?contract=${process.env.REACT_APP_HARBERGER}`)
+    console.log(result)
+    for(let data of result.data){
+      data.metadata = !data.metadata ? await getMetadata(data.tokenId) : data.metadata
+    } 
     setHarberger(result.data)
   }
     getHarberger()

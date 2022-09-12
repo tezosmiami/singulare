@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect} from 'react';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { useTezosContext } from '../context/tezos-context'
 import { useNavigate } from "react-router-dom";
-import { setMetadata }  from '../utils/ipfs'
+import { setMetadata }  from '../utils/metadata'
 import { useDropzone } from 'react-dropzone';
 import * as yup from 'yup'
 
@@ -80,7 +80,7 @@ export const Mint = () => {
     const handleMint = async () => {
         setIsMinting(true)
         setMessage('Ipfs. . .')
-        const metadataUri = await setMetadata({values: mintPayload , file: file, setMessage})
+        const metadataUri = await setMetadata({values: mintPayload , file: file})
         setTimeout(async () => {
             setMessage('Minting. . .');
             const isSuccessful = await app.mint(metadataUri, mintPayload.editions, mintPayload.royalties);
@@ -88,9 +88,9 @@ export const Mint = () => {
             setIsMinting(false)
             setTimeout(() => {
                 setMessage(null);
-                navigate('/Make')
-            }, 1200)
-        }, 3200)
+                navigate('/')
+            }, 800)
+        }, 1200)
     };
 
     useEffect(() => {
