@@ -202,9 +202,47 @@ async function deposit(deposit) {
   return true;
 };
 
+async function applyFees(token_id) {
+  try {
+    const interact = await tezos.wallet.at(process.env.REACT_APP_HARBERGER_FEES)
+      const op =  await interact.methods['apply_fees'](token_id)
 
+      if(op) {await op.send({
+        amount: 0,
+        mutez: true,
+        storageLimit: 310
+    }) 
+    // await op.confirmation(2)}
+  }
 
-  const wrapped = { ...app, tezos, collect, costCollect, mint, deposit, sync, unsync, activeAccount, address, name};
+  } catch(e) {
+      console.log('Error:', e);
+      return false;
+  }
+  return true;
+};
+
+async function setPrice(token_id,price) {
+  try {
+    const interact = await tezos.wallet.at(process.env.REACT_APP_HARBERGER_FEES)
+      const op =  await interact.methods['set_price'](token_id, price)
+
+      if(op) {await op.send({
+        amount: 0,
+        mutez: true,
+        storageLimit: 310
+    }) 
+    // await op.confirmation(2)}
+  }
+
+  } catch(e) {
+      console.log('Error:', e);
+      return false;
+  }
+  return true;
+};
+
+  const wrapped = { ...app, tezos, collect, costCollect, mint, setPrice, deposit, applyFees, sync, unsync, activeAccount, address, name};
 
   return (
    
