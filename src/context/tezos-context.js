@@ -104,11 +104,10 @@ export const TezosContextProvider = ({ children }) => {
   }
 
   async function collect({swap_id, price, contract, platform}) {
-    console.log(swap_id, platform)
     try {
       const interact = await tezos.wallet.at(contract)
         const op = platform === 'VERSUM' ? await interact.methods['collect_swap'](1,swap_id)
-                  : platform === 'HEN' || 'TYPED' ? await interact.methods['collect'](swap_id)
+                  : platform === 'HEN' || platform === 'TYPED' ? await interact.methods['collect'](swap_id)
                   : platform === '8BIDOU'? await interact.methods['buy'](swap_id, 1, price) 
                   : platform === 'OBJKT'? await interact.methods['fulfill_ask'](swap_id)
                   : ''

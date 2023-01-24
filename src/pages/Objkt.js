@@ -146,7 +146,7 @@ return(
                     
                     {objkt.platform === 'HEN' ? 'H=N' : objkt.platform === "VERSUM" ? objkt.platform 
                     : objkt.platform === '8BIDOU' ? '8BiDOU'
-                    : objkt.platform === 'TYPED' ? objkt.platform === 'TYPEDART' : 'OBJKT'}</a>
+                    : objkt.platform === 'TYPED' ? 'TYPEDART' : 'OBJKT'}</a>
                 </div>
             </div>
             {objkt.holdings[objkt.holdings.length-1].holder_address != objkt.artist_address
