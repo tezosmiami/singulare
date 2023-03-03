@@ -96,7 +96,7 @@ export const Profile = ({banned}) => {
         {account?.length===36 ? address.substr(0, 4) + "..." + address.substr(-4) : account}
       </a>
       {/* <img className='avatar' src={filteredcreated ? filteredcreated[0].minter_profile?.logo : null}/> */}
-      {filteredcreated.length > 0 && <p>created:</p>}
+      {filteredcreated.length > 0 && <p>Created</p>}
       <div className='container'>
       <Masonry
         breakpointCols={breakpointColumns}
@@ -121,11 +121,11 @@ export const Profile = ({banned}) => {
              </Masonry>
           </div>
           <div style= {{borderBottom: '6px dotted', width: '80%', marginTop:'33px'}} />
+          {filteredcurated.length > 0 && <p>Curated</p>}
          <div style= {{borderBottom: '6px dotted', width: '80%'}} />
        <div>
           <p></p>
        </div>
-       {filteredcurated.length > 0 && <p>curated:</p>}
        <div className='container'>
        <Masonry
         breakpointCols={breakpointColumns}

@@ -108,12 +108,13 @@ export const Main = ({banned}) => {
           </Masonry>
       
           <div>
-            <div style= {{borderBottom: '6px dotted', width: '80%', marginTop:'33px'}} />
-            <div style= {{borderBottom: '6px dotted', width: '80%'}} />
+            <div style= {{borderBottom: '6px dotted', width: '63%', marginTop:'33px'}} />
+            <p>Recent Mints</p>
+            <div style= {{borderBottom: '6px dotted', width: '63%'}} />
           </div>
           <p/>
         </div>}  
-      <p style={{marginTop:0}}>Recent Mints</p>
+      {/* <p style={{marginTop:0}}>Recent Mints</p> */}
       <Masonry
         breakpointCols={breakpointColumns}
         className='grid'
@@ -136,13 +137,13 @@ export const Main = ({banned}) => {
             ))} 
         </Masonry>
         <div>
-        <div style= {{borderBottom: '6px dotted', width: '80%', marginTop:'33px'}} />
+        <div style= {{borderBottom: '6px dotted', width: '63%', marginTop:'33px'}} />
         <div style={{justifyContent: 'center', margin: '18px', flexDirection: 'row'}}>
           {pageIndex >= 1 && <button onClick={() => {setPageIndex(pageIndex - 1); setOffset(offset-45); setOffsetNew(offsetNew-21); setOffsetNew(offsetTag-63); mutate('/api/objkts')}}>Previous  &nbsp;- </button>}
           <button onClick={() => {setPageIndex(pageIndex + 1); setOffset(offset+45); setOffsetNew(offsetNew+21); setOffsetTag(offsetTag+63); mutate('/api/objkts'); window.scrollTo({top: 0, behavior: 'smooth'})}}>Next</button>   
           <p/>
         </div>
-        <div style= {{borderBottom: '6px dotted', width: '80%'}} />
+        <div style= {{borderBottom: '6px dotted', width: '63%'}} />
         </div>
           <p/>
        {/* <p>random objkts</p>

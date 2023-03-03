@@ -128,7 +128,7 @@ return(
              : `https://objkt.com/asset/${params.contract}/${params.id}`} target="blank"  rel="noopener noreferrer">   */}
             <div>
             
-            <Link to={`/${objkt.minter_profile?.alias || objkt.artist_address}`}>created by:  {objkt.minter_profile?.alias
+            <Link to={`/${objkt.minter_profile?.alias || objkt.artist_address}`}>Created by:  {objkt.minter_profile?.alias
                ? objkt.minter_profile?.alias : objkt?.artist_address ? objkt.artist_address?.substr(0, 5) + ". . ." + objkt.artist_address?.substr(-5) :   `${objkt.creators[0]}, ${objkt.creators[1]}`}</Link>
            <p>[-]</p>
             <div>{objkt.price > 0 ?
@@ -149,11 +149,11 @@ return(
                 </div>
             </div>
             {objkt.holdings[objkt.holdings.length-1].holder_address != objkt.artist_address
-             && <Link to={`/${objkt.holdings[objkt.holdings.length-1]?.holder_profile?.alias || objkt.holdings[objkt.holdings.length-1].holder_address}`}><p>curated by: {objkt.holdings[objkt.holdings.length-1].holder_profile?.alias || objkt.holdings[objkt.holdings.length-1]?.holder_address.substr(0, 5) + ". . ." + objkt.holdings[objkt.holdings.length-1]?.holder_address.substr(-5)}</p></Link>}
+             && <Link to={`/${objkt.holdings[objkt.holdings.length-1]?.holder_profile?.alias || objkt.holdings[objkt.holdings.length-1].holder_address}`}><p>Curated by: {objkt.holdings[objkt.holdings.length-1].holder_profile?.alias || objkt.holdings[objkt.holdings.length-1]?.holder_address.substr(0, 5) + ". . ." + objkt.holdings[objkt.holdings.length-1]?.holder_address.substr(-5)}</p></Link>}
 
             {message}
              <div style= {{borderBottom: '6px dotted', width: '63%', marginTop:'27px'}} />
-        <div style= {{borderBottom: '6px dotted', width: '63%', marginBottom: '33px'}} />
+            <div style= {{borderBottom: '6px dotted', width: '63%', marginBottom: '33px'}} />
   </>
 )
 }
