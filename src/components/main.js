@@ -45,7 +45,7 @@ export const getObjkts = gql`
       thumbnail_uri
     }
 
-    tag: tokens(where: {editions: {_eq: "1"}, tags: {tag: {_eq: "teztrashone"}}, price: {_is_null: false}, mime_type: {_is_null: false}, fa2_address: {_neq: "KT1EpGgjQs73QfFJs9z7m1Mxm5MTnpC2tqse"}}, offset: $offsetTag, order_by: {minted_at: desc}, limit: 63) {
+    tag: tokens(where: {editions: {_eq: "1"}, tags: {tag: {_eq: "teztrashone"}}, mime_type: {_is_null: false}, fa2_address: {_neq: "KT1EpGgjQs73QfFJs9z7m1Mxm5MTnpC2tqse"}}, offset: $offsetTag, order_by: {minted_at: desc}, limit: 63) {
       mime_type
       artifact_uri
       display_uri
@@ -80,7 +80,8 @@ export const Main = ({banned}) => {
 
   const final = data?.random.filter((i) => !banned.includes(i.artist_address))
   const recent = data.recent.shift() &&  data?.recent.filter((i) => !data.tag.filter((j) => i.artifact_uri === j.artifact_uri).length)
-    return (
+
+  return (
       <>
       {data.tag.length > 0 &&
       <div>
