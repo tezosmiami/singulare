@@ -144,13 +144,13 @@ export const Search = ({returnSearch, query, banned}) => {
         </div>
         {objkts?.length > 0 && 
         <div>
-          <div style= {{borderBottom: '6px dotted', width: '63%', marginTop:'33px'}} />
+          <div style= {{borderBottom: '6px dotted', width: '45%', marginTop:'33px'}} />
           <div style={{justifyContent: 'center', margin: '18px', flexDirection: 'row'}}>
             {pageIndex >= 1 && !loading && <button onClick={() => {setPageIndex(pageIndex - 1); setOffset(offset-108)}}>Previous  &nbsp;- </button>}
             {query && objkts?.length > 100 && !loading && <button onClick={() => {setPageIndex(pageIndex + 1); setOffset(offset+108)}}>Next</button>}  
             {query && objkts?.length > 100 && !loading && <p/>}
           </div>
-          <div style= {{borderBottom: '6px dotted', width: '63%'}} />
+          <div style= {{borderBottom: '6px dotted', width: '45%'}} />
           <p/>
         </div>
        }
