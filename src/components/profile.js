@@ -105,15 +105,15 @@ export const Profile = ({banned}) => {
         {filteredcreated && filteredcreated.map(p=> (
            <Link className='center' key={p.artifact_uri+p.token_id} to={`/${p.fa2_address}/${p.token_id}`}>
            {p.mime_type.includes('image') && p.mime_type !== 'image/svg+xml' ?
-           <img alt='' className= 'pop' src={`https://ipfs.io/ipfs/${p.display_uri ? p.display_uri?.slice(7) : p.artifact_uri.slice(7)}`}/> 
+           <img alt='' className= 'pop' src={`https://dweb.link/ipfs/${p.display_uri ? p.display_uri?.slice(7) : p.artifact_uri.slice(7)}`}/> 
            : p.mime_type.includes('video') ? 
             <div className='pop'>
-              <ReactPlayer url={'https://ipfs.io/ipfs/' + p?.artifact_uri?.slice(7)} width='100%' height='100%' muted={true} playing={true} loop={true}/>
+              <ReactPlayer url={'https://dweb.link/ipfs/' + p?.artifact_uri?.slice(7)} width='100%' height='100%' muted={true} playing={true} loop={true}/>
              </div>
             : p.mime_type.includes('audio') ?  
               <div className= 'pop'>
-                <img className= 'pop' alt='' src={'https://ipfs.io/ipfs/' + p.display_uri.slice(7)} />
-                <audio style={{width:'93%'}} src={'https://ipfs.io/ipfs/' + p.artifact_uri.slice(7)} controls />
+                <img className= 'pop' alt='' src={'https://dweb.link/ipfs/' + p.display_uri.slice(7)} />
+                <audio style={{width:'93%'}} src={'https://dweb.link/ipfs/' + p.artifact_uri.slice(7)} controls />
               </div>
            : p.mime_type.includes('text') ? <div className='text'>{p.description}</div> : ''}
             </Link>
@@ -134,15 +134,15 @@ export const Profile = ({banned}) => {
         {filteredcurated && filteredcurated.map(p=> (
         <Link  key={p.artifact_uri+p.token_id} to={`/${p.fa2_address}/${p.token_id}`}>
         {p.mime_type.includes('image') && p.mime_type !== 'image/svg+xml' ?
-        <img alt='' className= 'pop'  src={`https://ipfs.io/ipfs/${p.display_uri ? p.display_uri?.slice(7) : p.artifact_uri.slice(7)}`}/> 
+        <img alt='' className= 'pop'  src={`https://dweb.link/ipfs/${p.display_uri ? p.display_uri?.slice(7) : p.artifact_uri.slice(7)}`}/> 
         : p.mime_type.includes('video') ? 
          <div className='pop'>
-           <ReactPlayer url={'https://ipfs.io/ipfs/' + p.artifact_uri.slice(7)} width='100%' height='100%' muted={true} playing={true} loop={true}/>
+           <ReactPlayer url={'https://dweb.link/ipfs/' + p.artifact_uri.slice(7)} width='100%' height='100%' muted={true} playing={true} loop={true}/>
           </div>
           : p.mime_type.includes('audio') ?  
           <div className= 'pop'>
-            <img className= 'pop' alt='' src={'https://ipfs.io/ipfs/' + p.display_uri.slice(7)} />
-            <audio style={{width:'93%'}} src={'https://ipfs.io/ipfs/' + p.artifact_uri.slice(7)} controls />
+            <img className= 'pop' alt='' src={'https://dweb.link/ipfs/' + p.display_uri.slice(7)} />
+            <audio style={{width:'93%'}} src={'https://dweb.link/ipfs/' + p.artifact_uri.slice(7)} controls />
           </div>
         : p.mime_type.includes('text') ? <div className='text'>{p.description}</div> : ''}
          </Link>

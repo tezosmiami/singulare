@@ -88,8 +88,8 @@ return(
     //   params.contract === 'KT1LjmAdYQCLBjwv4S2oFkEzyHVkomAf5MrW' ? 
     //   `https://versum.xyz/token/versum/${params.id}`
     //   : `https://objkt.com/asset/${params.contract}/${params.id}`} target="blank"  rel="noopener noreferrer">  
-    <a href = {`https://ipfs.io/ipfs/${objkt.artifact_uri.slice(7)}`} target='blank'  rel='noopener noreferrer'>
-    <img alt='' className= 'view' src={`https://ipfs.io/ipfs/${objkt.platform === '8BIDOU' ? objkt.display_uri.slice(7) : objkt.artifact_uri.slice(7)}`}/> 
+    <a href = {`https://dweb.link/ipfs/${objkt.artifact_uri.slice(7)}`} target='blank'  rel='noopener noreferrer'>
+    <img alt='' className= 'view' src={`https://dweb.link/ipfs/${objkt.platform === '8BIDOU' ? objkt.display_uri.slice(7) : objkt.artifact_uri.slice(7)}`}/> 
     </a>
     // </a>
     :
@@ -101,17 +101,17 @@ return(
   //    `https://versum.xyz/token/versum/${objkt.token_id}` 
   //      : `https://objkt.com/asset/${objkt.fa2_address}/${objkt.token_id}`} target="blank"  rel="noopener noreferrer"> 
       <div className='view'>
-        <a href = {`https://ipfs.io/ipfs/${objkt.artifact_uri.slice(7)}`} target='blank'  rel='noopener noreferrer'>
-        <ReactPlayer url={'https://ipfs.io/ipfs/' + objkt.artifact_uri.slice(7)} width='100%' height='100%' muted={true} playing={true} loop={true} controls={true}/>
+        <a href = {`https://dweb.link/ipfs/${objkt.artifact_uri.slice(7)}`} target='blank'  rel='noopener noreferrer'>
+        <ReactPlayer url={'https://dweb.link/ipfs/' + objkt.artifact_uri.slice(7)} width='100%' height='100%' muted={true} playing={true} loop={true} controls={true}/>
          </a>
       </div>
     // </a> 
     : objkt?.mime_type?.includes('audio') ?  
     <div className='view'>
-       <img className='view' alt='' style={{width:'90%', margin: '12px'}} src={'https://ipfs.io/ipfs/' + objkt.display_uri.slice(7)} />
-      <audio  style={{ margin: '6px'}}src={'https://ipfs.io/ipfs/' + objkt.artifact_uri.slice(7)} controls />
+       <img className='view' alt='' style={{width:'90%', margin: '12px'}} src={'https://dweb.link/ipfs/' + objkt.display_uri.slice(7)} />
+      <audio  style={{ margin: '6px'}}src={'https://dweb.link/ipfs/' + objkt.artifact_uri.slice(7)} controls />
     </div>
-    :  objkt.mime_type.includes('text') ? <a className='view' href = {`https://ipfs.io/ipfs/${objkt.artifact_uri.slice(7)}`} target='blank'  rel='noopener noreferrer'><div className='textObjkt'>{objkt.description}</div></a> : null}
+    :  objkt.mime_type.includes('text') ? <a className='view' href = {`https://dweb.link/ipfs/${objkt.artifact_uri.slice(7)}`} target='blank'  rel='noopener noreferrer'><div className='textObjkt'>{objkt.description}</div></a> : null}
     <div>
     <div style= {{borderBottom: '6px dotted', width: '63%', marginTop:'33px'}} />
         
