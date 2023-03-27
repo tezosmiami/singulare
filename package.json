@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@taquito/beacon-wallet": "^12.0.3",
-    "@taquito/taquito": "^11.1.0",
+    "@taquito/beacon-wallet": "^16.0.0-f11628c--",
+    "@taquito/taquito": "^16.0.0-f11628c--",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
