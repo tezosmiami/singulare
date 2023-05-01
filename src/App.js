@@ -31,7 +31,7 @@ function App() {
     <>
     <header>
     {app.address && <Link to={`/${app.name || app.address}`}>
-      {/* {app.address && <a href={`https://hicetnunc.miami/tz/${app.address}`}
+      {/* {app.address && <a href={`https://hicetnunc.live/tz/${app.address}`}
       target="blank" rel="noopener noreferrer"> 
        */}
         {(app.name.length > 0 && app.name + ' / ') || (app.address.substr(0, 4) + "..." + app.address.substr(-4)+' / ')}
