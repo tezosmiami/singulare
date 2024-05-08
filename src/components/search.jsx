@@ -77,7 +77,7 @@ export const Search = ({returnSearch, query, banned}) => {
         if (search && banned) { 
         setObjkts([])
         setLoading(true)  
-        const result = await request(process.env.REACT_APP_TEZTOK_API,  getSearch, {word: search,offset: offset})
+        const result = await request(import.meta.env.VITE_TEZTOK_API,  getSearch, {word: search,offset: offset})
         const aliases = result.aliases.filter((i) => !banned.includes(i.artist_address))
         const tags = result.tags.filter((i) => !banned.includes(i.artist_address))
         const tags_artifacts = new Set(tags.map(({ artifact_uri }) => artifact_uri));

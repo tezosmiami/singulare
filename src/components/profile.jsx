@@ -25,7 +25,7 @@ query alias($param: String!) {
 
 export const getAddressbySubjkt = gql`
 query subjkt($param: String!) {
-  hic_et_nunc_holder(where: { name: {_eq: $param}}) {
+  holder(where: { name: {_eq: $param}}) {
     address
   }
 }
@@ -62,8 +62,8 @@ query walletName($param: String!) {
 }
 ` 
    
-const fetcher = (key, query, param) => request(process.env.REACT_APP_TEZTOK_API, query, {param})
-const hicFetcher = (key, query, param) => request(process.env.REACT_APP_HICDEX_API, query, {param})
+const fetcher = (key, query, param) => request(import.meta.env.VITE_TEZTOK_API, query, {param})
+const hicFetcher = (key, query, param) => request(import.meta.env.VITE_HICDEX_API, query, {param})
 
 
 export const Profile = ({banned}) => {
@@ -73,7 +73,7 @@ export const Profile = ({banned}) => {
   const { account } = useParams();
   const { data: alias } = useSWR(account.length !== 36 ? ['/api/name', getAddressbyName, account] : null, fetcher)
   const { data: subjkt } = useSWR(account.length !== 36 ? ['/api/subjkt', getAddressbySubjkt, account.toLowerCase().replace(/\s+/g, '')] : null, hicFetcher)
-  const address = account?.length === 36 ? account : alias?.tzprofiles[0]?.account || subjkt?.hic_et_nunc_holder[0]?.address || null
+  const address = account?.length === 36 ? account : alias?.tzprofiles[0]?.account || subjkt?.holder[0]?.address || null
   const { data, error } = useSWR(address?.length === 36 ? ['/api/profile', getObjkts, address] : null, fetcher, { refreshInterval: 15000 })
 
   if ((subjkt || alias) && !address) return <div>nada. . .<p/></div>
@@ -96,6 +96,7 @@ export const Profile = ({banned}) => {
         {account?.length===36 ? address.substr(0, 4) + "..." + address.substr(-4) : account}
       </a>
       {/* <img className='avatar' src={filteredcreated ? filteredcreated[0].minter_profile?.logo : null}/> */}
+      <p/>
       {filteredcreated.length > 0 && <p>Created</p>}
       <div className='container'>
       <Masonry
@@ -121,11 +122,10 @@ export const Profile = ({banned}) => {
              </Masonry>
           </div>
           <div style= {{borderBottom: '6px dotted', width: '80%', marginTop:'33px'}} />
+          <p/>
           {filteredcurated.length > 0 && <p>Curated</p>}
-         <div style= {{borderBottom: '6px dotted', width: '80%'}} />
-       <div>
-          <p></p>
-       </div>
+         {/* <div style= {{borderBottom: '6px dotted', width: '80%'}} /> */}
+
        <div className='container'>
        <Masonry
         breakpointCols={breakpointColumns}

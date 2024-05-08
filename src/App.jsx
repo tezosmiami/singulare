@@ -5,13 +5,13 @@ import { Home } from './pages/Home'
 import { Gallery } from './pages/Gallery'
 import { Objkt } from './pages/Objkt'
 import { LightButton } from './components/light-button';
+import axios from 'axios'
 import "./styles/styles.css";
 
 const fonts = ['Halo', 'Advantage', 'Faster One', 'Monofett', 'Sonsie One', 'Libre Barcode 39 Text','Monoton']
 
 function App() {
   const  app = useTezosContext();
-  const axios = require('axios');
   const [banned, setBanned] = useState();
   
 
@@ -31,7 +31,7 @@ function App() {
     <>
     <header>
     {app.address && <Link to={`/${app.name || app.address}`}>
-      {/* {app.address && <a href={`https://hicetnunc.live/tz/${app.address}`}
+      {/* {app.address && <a href={`https://magiccity.live/tz/${app.address}`}
       target="blank" rel="noopener noreferrer"> 
        */}
         {(app.name.length > 0 && app.name + ' / ') || (app.address.substr(0, 4) + "..." + app.address.substr(-4)+' / ')}

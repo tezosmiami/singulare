@@ -51,7 +51,7 @@ export const Objkt = ({banned}) => {
     useEffect(() => {
       const getObjkt = async() => {
           if (params && banned) { 
-          const result = await request(process.env.REACT_APP_TEZTOK_API, queryObjkt)
+          const result = await request(import.meta.env.VITE_TEZTOK_API, queryObjkt)
           const filtered = result.tokens.filter((i) => !banned.includes(i.artist_address))
           setObjkt(filtered[0] || ['nada'] )
           }
@@ -84,7 +84,7 @@ return(
    {objkt.mime_type?.includes('image') && objkt.mime_type !== 'image/svg+xml' ?  
     // <a 
     //   href={params.contract ==='KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton' ? 
-    //   `https://hicetnunc.live/objkt/${params.id}` : 
+    //   `https://magiccity.live/objkt/${params.id}` : 
     //   params.contract === 'KT1LjmAdYQCLBjwv4S2oFkEzyHVkomAf5MrW' ? 
     //   `https://versum.xyz/token/versum/${params.id}`
     //   : `https://objkt.com/asset/${params.contract}/${params.id}`} target="blank"  rel="noopener noreferrer">  
@@ -96,7 +96,7 @@ return(
    objkt?.mime_type?.includes('video') ?  
   //  <a key={objkt.artifact_uri+objkt.token_id} 
   //     href={objkt.fa2_address === 'KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton' ?
-  //    `https://hicetnunc.live/objkt/${objkt.token_id}` : 
+  //    `https://magiccity.live/objkt/${objkt.token_id}` : 
   //     objkt.fa2_address === 'KT1LjmAdYQCLBjwv4S2oFkEzyHVkomAf5MrW' ? 
   //    `https://versum.xyz/token/versum/${objkt.token_id}` 
   //      : `https://objkt.com/asset/${objkt.fa2_address}/${objkt.token_id}`} target="blank"  rel="noopener noreferrer"> 
@@ -123,7 +123,7 @@ return(
        
         <p hidden={objkt.mime_type.includes('text')} className='descript'> {objkt.description}</p>
         {!objkt.mime_type.includes('text') && <div style= {{borderBottom: '6px dotted', width: '63%', margin: '33px'}} />}
-        {/* <a href={params.contract ==='KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton' ? `https://hicetnunc.live/objkt/${params.id}` : 
+        {/* <a href={params.contract ==='KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton' ? `https://magiccity.live/objkt/${params.id}` : 
               params.contract === 'KT1LjmAdYQCLBjwv4S2oFkEzyHVkomAf5MrW' ? `https://versum.xyz/token/versum/${params.id}` 
              : `https://objkt.com/asset/${params.contract}/${params.id}`} target="blank"  rel="noopener noreferrer">   */}
             <div>
@@ -136,7 +136,7 @@ return(
                    {`collect for ${objkt.price/1000000}ꜩ`}
                   <a className='center'>-</a>
                  </div> : ''} 
-                 <a href={objkt.platform ==='HEN' ? `https://hicetnunc.live/objkt/${params.id}` 
+                 <a href={objkt.platform ==='HEN' ? `https://magiccity.live/objkt/${params.id}` 
                     : objkt.platform === 'VERSUM' ? `https://versum.xyz/token/versum/${params.id}` 
                     : objkt.platform === '8BIDOU' && objkt.eightbid_rgb.length < 800 ? `https://ui.8bidou.com/item/?id=${params.id}` 
                     : objkt.platform === '8BIDOU' &&  objkt.eightbid_rgb.length > 800 ? `https://ui.8bidou.com/item_r/?id=${params.id}` 

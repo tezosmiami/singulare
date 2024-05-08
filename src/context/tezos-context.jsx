@@ -5,14 +5,14 @@ import { BeaconWallet } from "@taquito/beacon-wallet";
 
 const querySubjkt = `
 query Subjkt($address: String!) {
-  hic_et_nunc_holder(where: {address: {_eq: $address}}) {
+  holder(where: {address: {_eq: $address}}) {
     name
   }
 }
 `
 
 async function fetchGraphQL(queryObjkts, name, variables) {
-  let result = await fetch(process.env.REACT_APP_HICDEX_API, {
+  let result = await fetch(import.meta.env.VITE_HICDEX_API, {
     method: 'POST',
     body: JSON.stringify({
       query: queryObjkts,
@@ -62,8 +62,8 @@ export const TezosContextProvider = ({ children }) => {
            if (errors) {
              console.error(errors);
            }
-           data?.hic_et_nunc_holder[0]?.name && 
-           setName(data.hic_et_nunc_holder[0].name);
+           data?.holder[0]?.name && 
+           setName(data.holder[0].name);
           }
       }
     };
@@ -88,8 +88,8 @@ export const TezosContextProvider = ({ children }) => {
      if (errors) {
        console.error(errors);
      }
-     if(data?.hic_et_nunc_holder[0]?.name) {
-        setName(data.hic_et_nunc_holder[0].name);
+     if(data?.holder[0]?.name) {
+        setName(data.holder[0].name);
       }
     }
    

@@ -23,8 +23,8 @@ const breakpointColumns = {
 // }
 // `
 export const getObjkts = gql`
-  query objkts ($offset: Int!, $offsetNew: Int!, $offsetTag: Int!) {
-    random: tokens(where: {editions: {_eq: "1"}, price: {_is_null: false}, mime_type: {_is_null: false}, fa2_address: {_neq: "KT1EpGgjQs73QfFJs9z7m1Mxm5MTnpC2tqse"}}, offset: $offset, limit: 45) {
+  query objkts ($offset: Int!, $offsetNew: Int!) {
+    random: tokens(where: {editions: {_eq: "1"}, price: {_is_null: false}, mime_type: {_is_null: false}, fa2_address: {_neq: "KT1EpGgjQs73QfFJs9z7m1Mxm5MTnpC2tqse"}}, offset: $offset, limit: 21) {
       mime_type
       artifact_uri
       display_uri
@@ -35,17 +35,7 @@ export const getObjkts = gql`
       thumbnail_uri
     }
 
-    recent: tokens(where: {editions: {_eq: "1"}, price: {_is_null: false}, mime_type: {_is_null: false}, fa2_address: {_neq: "KT1EpGgjQs73QfFJs9z7m1Mxm5MTnpC2tqse"}}, offset: $offsetNew, order_by: {minted_at: desc}, limit: 21) {
-      mime_type
-      artifact_uri
-      display_uri
-      fa2_address
-      description
-      token_id
-      thumbnail_uri
-    }
-
-    tag: tokens(where: {editions: {_eq: "1"}, tags: {tag: {_eq: "teztrashone"}}, mime_type: {_is_null: false}, fa2_address: {_neq: "KT1EpGgjQs73QfFJs9z7m1Mxm5MTnpC2tqse"}}, offset: $offsetTag, order_by: {minted_at: desc}, limit: 63) {
+    recent: tokens(where: {editions: {_eq: "1"}, price: {_is_null: false}, mime_type: {_is_null: false}, fa2_address: {_neq: "KT1EpGgjQs73QfFJs9z7m1Mxm5MTnpC2tqse"}}, offset: $offsetNew, order_by: {minted_at: desc}, limit: 45) {
       mime_type
       artifact_uri
       display_uri
@@ -56,34 +46,44 @@ export const getObjkts = gql`
     }
   }  
    ` 
-const fetcher = (key, query, offset, offsetNew, offsetTag) => request(process.env.REACT_APP_TEZTOK_API, query, {offset, offsetNew, offsetTag})
+    //  $offsetTag: Int!
+    // tag: tokens(where: {editions: {_eq: "1"}, tags: {tag: {_eq: "teztrashone"}}, mime_type: {_is_null: false}, fa2_address: {_neq: "KT1EpGgjQs73QfFJs9z7m1Mxm5MTnpC2tqse"}}, offset: $offsetTag, order_by: {minted_at: desc}, limit: 63) {
+    //   mime_type
+    //   artifact_uri
+    //   display_uri
+    //   fa2_address
+    //   description
+    //   token_id
+    //   thumbnail_uri
+    // }  
+const fetcher = (key, query, offset, offsetNew) => request(import.meta.env.VITE_TEZTOK_API, query, {offset, offsetNew})
 
 export const Main = ({banned}) => {
   const { mutate } = useSWRConfig()
   const [pageIndex, setPageIndex] = useState(0);
   const [offset, setOffset] = useState(Math.floor(Math.floor(Math.random() * 195000)))
-  const [offsetNew, setOffsetNew] = useState(0)
-  const [offsetTag, setOffsetTag] = useState(0)
+  const [offsetNew, setOffsetNew] = useState(1)
+  // const [offsetTag, setOffsetTag] = useState(0)
 
   // useEffect(() => {
   //   const getTotal = async () => {
-  //     const result = await request(process.env.REACT_APP_TEZTOK_API, getCount)
+  //     const result = await request(import.meta.env.VITE_TEZTOK_API, getCount)
   //     setOffset(Math.floor(Math.floor(Math.random() * result.tokens_aggregate.aggregate.count)))
   // }
   //   getTotal();
   // }, [])
  
-  const { data, error } = useSWR(offset>0 && ['/api/objkts', getObjkts, offset, offsetNew, offsetTag], fetcher, { refreshInterval: 5000 })
+  const { data, error } = useSWR(offset>0 && ['/api/objkts', getObjkts, offset, offsetNew], fetcher, { refreshInterval: 5000 })
 
   if (error) return <div>nada. . .<p/></div>
   if (!data) return <div>loading. . .<p/></div>
 
   const final = data?.random.filter((i) => !banned.includes(i.artist_address))
-  const recent = data.recent.shift() &&  data?.recent.filter((i) => !data.tag.filter((j) => i.artifact_uri === j.artifact_uri).length)
-
+  const recent = data?.recent
+  //&&  data?.recent.filter((i) => !data.tag.filter((j) => i.artifact_uri === j.artifact_uri).length)
   return (
       <>
-      {data.tag.length > 0 &&
+      {/* {data.tag.length > 0 &&
       <div>
         <p style={{marginTop:0}}>#TEZTRASHONE</p>
         <Masonry
@@ -114,8 +114,10 @@ export const Main = ({banned}) => {
             <div style= {{borderBottom: '6px dotted', width: '63%'}} />
           </div>
           <p/>
-        </div>}  
-      {/* <p style={{marginTop:0}}>Recent Mints</p> */}
+        </div>}   */}
+        
+      <p style={{marginTop:0}}>Recent</p>
+
       <Masonry
         breakpointCols={breakpointColumns}
         className='grid'
@@ -136,18 +138,10 @@ export const Main = ({banned}) => {
            : p.mime_type.includes('text') ? <div className='text'>{p.description}</div> : ''}
             </Link>   
             ))} 
-        </Masonry>
-        <div>
-        <div style= {{borderBottom: '6px dotted', width: '45%', marginTop:'33px'}} />
-        <div style={{justifyContent: 'center', margin: '18px', flexDirection: 'row'}}>
-          {pageIndex >= 1 && <button onClick={() => {setPageIndex(pageIndex - 1); setOffset(offset-45); setOffsetNew(offsetNew-21); setOffsetNew(offsetTag-63); mutate('/api/objkts')}}>Previous  &nbsp;- </button>}
-          <button onClick={() => {setPageIndex(pageIndex + 1); setOffset(offset+45); setOffsetNew(offsetNew+21); setOffsetTag(offsetTag+63); mutate('/api/objkts'); window.scrollTo({top: 0, behavior: 'smooth'})}}>Next</button>   
-          <p/>
-        </div>
-        <div style= {{borderBottom: '6px dotted', width: '45%'}} />
-        </div>
-          <p/>
-       {/* <p>random objkts</p>
+      </Masonry>
+      <div style= {{borderBottom: '6px dotted', width: '63%', marginTop:'33px'}} />
+      <p/>
+      <p style={{marginTop: '0px'}}>Random</p>
       <Masonry
         breakpointCols={breakpointColumns}
         className='grid'
@@ -170,9 +164,16 @@ export const Main = ({banned}) => {
             ))} 
         </Masonry>
         <div>
-          <p></p>
-       </div>
-          <p/> */}
+        <div style= {{borderBottom: '6px dotted', width: '188px', marginTop:'33px'}} />
+        <div style={{justifyContent: 'center', margin: '12px', flexDirection: 'row'}}>
+          {pageIndex >= 1 && <button onClick={() => {setPageIndex(pageIndex - 1); setOffset(offset-21); setOffsetNew(offsetNew - 45); mutate('/api/objkts')}}>Previous  &nbsp;- </button>}
+          <button onClick={() => {setPageIndex(pageIndex + 1); setOffset(offset+21); setOffsetNew(offsetNew + 45); mutate('/api/objkts'); window.scrollTo({top: 0, behavior: 'smooth'})}}>Next</button>   
+          <p/>
+        </div>
+        <div style= {{borderBottom: '6px dotted', width: '188px'}} />
+        </div>
+       
+          <p/>
      </>
     );
   }
