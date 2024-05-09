@@ -143,7 +143,7 @@ return(
                     : objkt.platform === '8BIDOU' && objkt.eightbid_rgb.length < 800 ? `https://ui.8bidou.com/item/?id=${params.id}` 
                     : objkt.platform === '8BIDOU' &&  objkt.eightbid_rgb.length > 800 ? `https://ui.8bidou.com/item_r/?id=${params.id}` 
                     : objkt.platform === 'TYPED' ? `https://typed.art/${params.id}`  
-                    : `https://objkt.com/asset/${params.contract}/${params.id}`} target="blank"  rel="noopener noreferrer">
+                    : `https://objkt.com/tokens/${params.contract}/${params.id}?ref=tz2WNxPcE7JZhAFfqGEHkMtd2gcHaeiJKMWE`} target="blank"  rel="noopener noreferrer">
                     
                     {objkt.platform === 'HEN' ? 'H=N' : objkt.platform === "VERSUM" ? objkt.platform 
                     : objkt.platform === '8BIDOU' ? '8BiDOU'
