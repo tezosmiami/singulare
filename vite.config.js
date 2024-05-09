@@ -1,9 +1,9 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import svgrPlugin from 'vite-plugin-svgr'
-
 import rollupNodePolyFill from 'rollup-plugin-polyfill-node'
 import filterReplace from 'vite-plugin-filter-replace'
+
 
 export default defineConfig({
     plugins: [
@@ -46,18 +46,16 @@ export default defineConfig({
         plugins: [rollupNodePolyFill()],
         output: {
           manualChunks: {
-            contracts: [
-              '@taquito/beacon-wallet',
-              '@taquito/michelson-encoder',
-              '@stablelib/ed25519',
-              '@stablelib/nacl',
-              '@stablelib/x25519-session',
-              '@taquito/taquito',
+            taquito: [
+              '@taquito/taquito'
+            ],
+            beacon: [
+              '@taquito/beacon-wallet'
             ],
             ui: [
               'react',
               'react-router-dom',
-              'react-dom',
+              'react-dom'
             ],
           },
         },
@@ -75,7 +73,7 @@ export default defineConfig({
       alias: {
         'readable-stream': 'vite-compatible-readable-stream',
         stream: 'vite-compatible-readable-stream',
-        // path: require.resolve('path-browserify'),
+        fs: "rollup-plugin-node-polyfills/polyfills/empty",
         util: 'rollup-plugin-node-polyfills/polyfills/util',
         buffer: 'rollup-plugin-node-polyfills/polyfills/buffer-es6',
         process: 'rollup-plugin-node-polyfills/polyfills/process-es6'

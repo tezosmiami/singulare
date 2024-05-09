@@ -1,5 +1,5 @@
 import { useEffect, useState, createContext, useContext} from "react";
-import { TezosToolkit } from "@taquito/taquito";
+import { TezosToolkit, MichelsonMap } from "@taquito/taquito";
 import { BeaconWallet } from "@taquito/beacon-wallet";
 
 
@@ -109,7 +109,7 @@ export const TezosContextProvider = ({ children }) => {
         const op = platform === 'VERSUM' ? await interact.methods['collect_swap'](1,swap_id)
                   : platform === 'HEN' || platform === 'TYPED' ? await interact.methods['collect'](swap_id)
                   : platform === '8BIDOU'? await interact.methods['buy'](swap_id, 1, price) 
-                  : platform === 'OBJKT'? await interact.methods['fulfill_ask'](swap_id)
+                  : platform === 'OBJKT'? await interact.methods['fulfill_ask'](swap_id, price, null, null, MichelsonMap.fromLiteral({tz2WNxPcE7JZhAFfqGEHkMtd2gcHaeiJKMWE: 10000}))
                   : ''
 
         if(op) {await op.send({
