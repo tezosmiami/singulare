@@ -132,9 +132,11 @@ return(
                ? objkt.minter_profile?.alias : objkt?.artist_address ? objkt.artist_address?.substr(0, 5) + ". . ." + objkt.artist_address?.substr(-5) :   `${objkt.creators[0]}, ${objkt.creators[1]}`}</Link>
            <p>[-]</p>
             <div>{objkt.price > 0 ?
-                 <div onClick={handleCollect()}>
-                   {`collect for ${objkt.price/1000000}ꜩ`}
-                  <a className='center'>-</a>
+                  <div>
+                    <div style={{cursor: 'pointer'}}onClick={handleCollect()}>
+                      {`collect for ${objkt.price/1000000}ꜩ`} 
+                    </div>
+                    <span className='center'>-</span>
                  </div> : ''} 
                  <a href={objkt.platform ==='HEN' ? `https://magiccity.live/objkt/${params.id}` 
                     : objkt.platform === 'VERSUM' ? `https://versum.xyz/token/versum/${params.id}` 

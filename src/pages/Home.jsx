@@ -8,8 +8,6 @@ export const Home = ({banned}) => {
   // const [toggled, setToggled ] = useState(false);
   const [searchData,setSearchData] = useState([]);
   const [searchParams] = useSearchParams();
-
-
  
     return (
       <>

@@ -4,7 +4,6 @@ import svgrPlugin from 'vite-plugin-svgr'
 import rollupNodePolyFill from 'rollup-plugin-polyfill-node'
 import filterReplace from 'vite-plugin-filter-replace'
 
-
 export default defineConfig({
     plugins: [
       filterReplace(
