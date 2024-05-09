@@ -108,8 +108,9 @@ export const TezosContextProvider = ({ children }) => {
       const interact = await tezos.wallet.at(contract)
         const op = platform === 'VERSUM' ? await interact.methods['collect_swap'](1,swap_id)
                   : platform === 'HEN' || platform === 'TYPED' ? await interact.methods['collect'](swap_id)
-                  : platform === '8BIDOU'? await interact.methods['buy'](swap_id, 1, price) 
-                  : platform === 'OBJKT'? await interact.methods['fulfill_ask'](swap_id, price, null, null, MichelsonMap.fromLiteral({tz2WNxPcE7JZhAFfqGEHkMtd2gcHaeiJKMWE: 10000}))
+                  : platform === '8BIDOU' ? await interact.methods['buy'](swap_id, 1, price) 
+                  : platform === 'OBJKT' ? contract === 'KT1WvzYHCNBvDSdwafTHv7nJ1dWmZ8GCYuuC'
+                     ? await interact.methods['fulfill_ask'](swap_id) : await interact.methods['fulfill_ask'](swap_id, price, null, null, MichelsonMap.fromLiteral({tz2WNxPcE7JZhAFfqGEHkMtd2gcHaeiJKMWE: 10000}))
                   : ''
 
         if(op) {await op.send({
